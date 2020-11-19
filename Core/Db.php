@@ -6,7 +6,7 @@ class Db {
     private  $pdo;
     private  $host = '127.0.0.1';
     private  $user = 'root';
-    private  $password = 'Bendamandes';
+    private  $password = '';
     private  $db = 'db_employee_monitoring_system';
    
   private function __construct() 
