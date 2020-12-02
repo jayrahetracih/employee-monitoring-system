@@ -1,8 +1,10 @@
 <?php 
+require_once '../../Controller/Information/InfoInterface.php';
+
 /**
  * undocumented class
  */
-class Employee {
+class Employee implements InfoInterface{
 
     private $db;
 
@@ -31,8 +33,8 @@ class Employee {
         echo 'update employee info';
     }
 
-    public function delete(){
-        echo 'delete employee info';
+    public function changeStatus(){
+        echo 'change employee status';
     }
 
 
