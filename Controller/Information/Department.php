@@ -11,4 +11,9 @@ class Department implements InfoInterface {
         $this->db = Db::getInstance();
     }
 
+    public function create()
+    {
+        
+    }
+
 }
