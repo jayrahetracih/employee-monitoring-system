@@ -1,4 +1,7 @@
 <?php
+require_once '../../../Controller/Class/Validator.php';
+
+$validator = new Validator();
 
 $fields = array('name' => array(
                     'first_name',
@@ -22,6 +25,70 @@ $fields = array('name' => array(
 
 extract($fields);
 
+        if (isset($_POST['btn_register'])) {
+
+            $validation = $validator->checkInput($_POST, array(
+                'first_name' => array(
+                    'name' => 'First Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'middle_name' => array(
+                    'name' => 'Middle Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'last_name' => array(
+                    'name' => 'Last Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'gender' => array(
+                    'name' => 'Gender',
+                    'required' => true
+                ),            
+                'age' => array(
+                    'name' => 'Age',
+                    'required' => true
+                ),         
+                'address' => array(
+                    'name' => 'Address',
+                    'required' => true,
+                    'min' => 10,
+                    'max' => 50
+                ),           
+                'mobile_number' => array(
+                    'name' => 'Mobile Number',
+                    'required' => true
+                ),                 
+                'email' => array(
+                    'name' => 'Email',
+                    'required' => true
+                )           
+            )); 
+
+            if($validation->passed()) {
+
+                /* $execute_register['query_result'] =  parent::executeRegister($this->post);
+            
+                return $execute_register; */
+
+                print_r($_POST);
+
+            } else {
+              
+                $user_validation  =  $validation->errors(); 
+                //print_r($validation->errors());
+            } 
+
+        }
+
+
+//print_r($_POST);
+
 ?>
 
 <?php include_once '../../../Public/layouts/header.php'; ?>
@@ -41,22 +108,21 @@ extract($fields);
 
                         <?php if ($name[$key] == 'gender'): ?>
 
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01"><?php echo $placeholder[$key]; ?></label>
-                                </div>
-                                <select name="<?php echo $name[$key]; ?>" class="custom-select" id="inputGroupSelect01">
-                                    <option selected>Choose...</option>
+                             <div class="form-group ">
+                                <select  name="<?php echo $name[$key]; ?>"  class="custom-select form-control <?php echo (!empty( $user_validation[$name[$key]])) ? 'is-invalid' : '' ; ?>" >
+                                    <option value="">Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
-                                </select>
+                                </select> 
+                                <span class="invalid-feedback" ><?php echo $user_validation[$name[$key]] ?? '' ?></span>
                             </div>
-                            
+
                         <?php else: ?>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="<?php echo $name[$key]; ?>" placeholder="<?php echo $placeholder[$key]; ?>">
-                            <span class="invalid-feedback" ></span>
+                            <input type="text" class="form-control <?php echo (!empty( $user_validation[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
+                            name="<?php echo $name[$key]; ?>" placeholder="<?php echo $placeholder[$key]; ?>">
+                            <span class="invalid-feedback" ><?php echo $user_validation[$name[$key]] ?? '' ?></span>
                         </div>
 
                         <?php endif; ?>
