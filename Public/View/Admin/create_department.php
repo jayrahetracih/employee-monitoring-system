@@ -1,5 +1,41 @@
-<?php include_once '../../../Public/layouts/header.php'; ?>
+<?php
+ include_once '../../../Helper/Validator.php';
 
+    $validation = new Validator();
+
+    if(isset($_POST['btn_add']))
+    {
+
+      $validate = $validation(checkInput($_POST, array(
+        'dept_name' => array(
+            'name' => 'Department Name',
+            'required' => true,
+            'min' => 2,
+            'max' => 30
+        )
+      )));
+
+    }
+
+    if($validation->passed()) {
+
+      /* $execute_register['query_result'] =  parent::executeRegister($this->post);
+
+      return $execute_register; */
+
+      print_r($_POST);
+
+    } else {
+
+      $user_validation  =  $validation->errors(); 
+      //print_r($validation->errors());
+
+
+?>
+
+
+
+<?php include_once '../../../Public/layouts/header.php'; ?>
 
 <section id="cover">
    
@@ -14,7 +50,7 @@
                     <p class="h4 mb-4 text-center">Add Department</p>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="name" placeholder="Department Name">
+                            <input type="text" class="form-control" name="dept_name" placeholder="Department Name">
                             <span class="invalid-feedback" ></span>
                         </div>
 
