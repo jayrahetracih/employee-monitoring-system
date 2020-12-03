@@ -6,7 +6,11 @@ require_once '../../Core/Config.php';
 class Db {
 
     private static $instance = null;
-    private  $pdo;
+    private $pdo,
+            $_results,
+            $_errors = false,
+            $_query,
+            $_rowcount;
 
   private function __construct() {
 
@@ -31,6 +35,54 @@ class Db {
     }
 
     return self::$instance;
+  }
+
+  public function query($sql, $params = array())
+  {
+
+    $this->_errors = false;
+    $x = 1;
+    if($this->_query = $this->_pdo->prepare($sql))
+    {               
+        foreach($params as $param)
+        {
+          $this->_query->bindValue($x, $param);
+          $x++;
+        }
+
+      if($this->_query->execute())
+      {
+        $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
+        $this->_rowcount = $this->_query->rowCount();
+      }
+      else
+      {
+        $this->_errors = true;
+      }
+    }
+    return $this;
+
+  }
+
+  public function insert($table,$post = array()){
+  
+    foreach($post as $key => $value)
+    {
+        $child_post[$key] = $value;
+        $post[$key] ='?';
+    }
+
+    print_r($child_post);
+    echo '<br>';
+    print_r($post);
+
+   /*  $sql = "INSERT INTO $table (`". implode('`, `', $keys) ."`) VALUES ({$values})";
+    if(!$this->query($sql, $fields)->error())
+    {
+        return true;
+    }
+    
+    return false; */
   }
 
 
