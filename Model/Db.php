@@ -1,5 +1,5 @@
 <?php 
-require_once '../../Core/Config.php';
+require_once '../../../Core/Config.php';
 /**
  * undocumented class
  */

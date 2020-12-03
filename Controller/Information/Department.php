@@ -2,7 +2,7 @@
 /**
  * undocumented class
  */
-class Department {
+class Department implements InfoInterface{
     
 }
 
