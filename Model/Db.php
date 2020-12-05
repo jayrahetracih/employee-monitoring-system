@@ -12,7 +12,7 @@ class Db {
             $_query,
             $_rowcount;
 
-  private function __construct() {
+  public function __construct() {
 
     try {
       
@@ -26,7 +26,8 @@ class Db {
 
   }
 
-  public static function getInstance() {
+  public static function getInstance() 
+  {
 
     if(!isset(self::$instance)) {
 
@@ -42,7 +43,7 @@ class Db {
 
     $this->_errors = false;
     $x = 1;
-    if($this->_query = $this->_pdo->prepare($sql))
+    if($this->_query = $this->pdo->prepare($sql))
     {               
         foreach($params as $param)
         {
@@ -64,25 +65,29 @@ class Db {
 
   }
 
-  public function insert($table,$post = array()){
-  
+  public function insert($table,$post = array())
+  {
+    $fields = array_keys($post);
+
     foreach($post as $key => $value)
     {
         $child_post[$key] = $value;
         $post[$key] ='?';
     }
 
-    print_r($child_post);
-    echo '<br>';
-    print_r($post);
-
-   /*  $sql = "INSERT INTO $table (`". implode('`, `', $keys) ."`) VALUES ({$values})";
-    if(!$this->query($sql, $fields)->error())
+     $sql = "INSERT INTO $table (`". implode('`, `', $fields) ."`) VALUES (". implode(', ', $post) .")";
+     
+    if(!$this->query($sql, $child_post)->error())
     {
         return true;
     }
     
-    return false; */
+    return false; 
+  }
+
+  public function error()
+  {
+      return $this->_errors;
   }
 
 
