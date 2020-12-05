@@ -1,35 +1,20 @@
 <?php
- include_once '../../../Helper/Validator.php';
+ include_once '../../../Controller/Class/Validator.php';
+ include_once '../../../Model/Db.php';
 
-    $validation = new Validator();
-
+    $db = new Db();
+    
     if(isset($_POST['btn_add']))
     {
 
-      $validate = $validation(checkInput($_POST, array(
-        'dept_name' => array(
-            'name' => 'Department Name',
-            'required' => true,
-            'min' => 2,
-            'max' => 30
-        )
-      )));
+      if($db->insert('department', array(
+
+        'department' => $_POST['dept_name'],
+        'department_status' => 'Active'
+
+      ))){echo 'success';}
 
     }
-
-    if($validation->passed()) {
-
-      /* $execute_register['query_result'] =  parent::executeRegister($this->post);
-
-      return $execute_register; */
-
-      print_r($_POST);
-
-    } else {
-
-      $user_validation  =  $validation->errors(); 
-      //print_r($validation->errors());
-
 
 ?>
 
