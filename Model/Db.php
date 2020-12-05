@@ -87,6 +87,7 @@ class Db {
 
   public function error()
   {
+    
       return $this->_errors;
   }
 

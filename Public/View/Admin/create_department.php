@@ -1,20 +1,16 @@
 <?php
  include_once '../../../Controller/Class/Validator.php';
- include_once '../../../Model/Db.php';
+ include_once '../../../Controller/Information/Department.php';
 
-    $db = new Db();
-    
-    if(isset($_POST['btn_add']))
-    {
+ $dept = new Department();
 
-      if($db->insert('department', array(
-
-        'department' => $_POST['dept_name'],
-        'department_status' => 'Active'
-
-      ))){echo 'success';}
-
-    }
+ if(isset($_POST['btn_add']))
+ {
+     if($dept->create())
+     {
+         echo 'success!';
+     }
+ }
 
 ?>
 
@@ -35,7 +31,7 @@
                     <p class="h4 mb-4 text-center">Add Department</p>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="dept_name" placeholder="Department Name">
+                            <input type="text" class="form-control" name="dept_name" placeholder="Department Name" autocomplete="off">
                             <span class="invalid-feedback" ></span>
                         </div>
 
