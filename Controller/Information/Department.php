@@ -14,7 +14,7 @@ class Department implements InfoInterface {
 
     public function create()
     {
-        if(!$this->db->insert('department', array(
+        if($this->db->insert('department', array(
 
             'department' => $_POST['dept_name'],
             'department_status' => 'Active'
