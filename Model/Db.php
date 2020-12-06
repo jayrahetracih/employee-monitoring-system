@@ -85,7 +85,8 @@ class Db {
 
   public function get($table, $field, $where)
   {
-      return $this->action('SELECT', $field, $table, $where);
+      $this->action('SELECT', $field, $table, $where);
+      return $this->_results;
   }
 
   public function delete($table, $where)

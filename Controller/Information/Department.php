@@ -26,9 +26,10 @@ class Department implements InfoInterface {
         return false;
     }
 
-    public function read()
+    public function read($field, $table, $condition = array())
     {
-        
+        $result = $this->db->get($table, $field, $condition);
+        return $result;
     }
 
     public function update()

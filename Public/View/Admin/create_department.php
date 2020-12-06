@@ -5,23 +5,8 @@
 
  $dept = new Department();
 
- if(isset($_POST['btn_add']))
- {
-     $data = array();
-     if($dept->create())
-     {
-        $data['success'] = true;
-        $data['message'] = 'Success!';
-        echo json_encode($data);
-     }
-     else
-     {
-        $data['success'] = true;
-        $data['message'] = 'Failed!';
-        echo json_encode($data);
-     }
- }
-
+ $dept_obj = $dept->read('department', 'department', array('department_status','=','Active'));
+ 
 ?>
 
 
@@ -38,7 +23,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                <p id="error"></p>
+                <p id="message"></p>
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -53,8 +38,25 @@
         <!-- row -->
         <div class="row ">
             <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4">
+                
+            <?php foreach($dept_obj as $obj): ?>
+                
+                    <?php foreach($obj as $arr => $value): ?>
+                    
+                        <div class="row-lg border border-secondary justify-content-center p-1"><?php echo $value ?? ''; ?></div>
+
+                    <?php endforeach;?>
+                
+            <?php endforeach; ?>
+            </div>
+         
+        </div> <!-- row -->
+
+        <!-- row -->
+        <div class="row ">
+            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4">
                 <!-- form Add Department -->
-                <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                <form id="frm" class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
 
                     <p class="h4 mb-4 text-center">Add Department</p>
 
@@ -78,40 +80,21 @@ $(document).ready(function() {
 
 // process the form
 $('form').submit(function(event) {
-
-    // get the form data
-    // there are many ways to get this data using jQuery (you can use the class or id also)
-    var formData = {
-        'dept_name'              : $('input[name=dept_name]').val(),
-        'btn_add'             : $('input[name=btn_add]').val()
-    };
-    
+    event.preventDefault();
     // process the form
     $.ajax({
         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-        url         : 'create_department.php', // the url where we want to POST
-        data        : formData, // our data object
-        success     : function(data){$('#alertModal').modal("show");},
-        dataType    : 'json', // what type of data do we expect back from the server
-                    encode          : true
-    }).done(function(data) {
-            console.log(formData);
-            alert('AJAX successful');
-            // log data to the console so we can see
+        url         : 'Process_Department.php', // the url where we want to POST
+        dataType    : 'json',
+        data        : $("#frm").serialize(), // our data object
+        success     : function(data)
+        {
             console.log(data);
+            $("#message").html(data.message);
+            $("#alertModal").modal("show");
+        }
+    });
 
-            // here we will handle errors and validation messages
-            if(data.success)
-            {
-                $('#alertModal').modal("show");
-            }
-            else
-            {
-                $('#alertModal').modal("show");
-            }
-        });  
-    // stop the form from submitting the normal way and refreshing the page
-    event.preventDefault();
 });
 
 });
