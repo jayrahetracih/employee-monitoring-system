@@ -65,6 +65,35 @@ class Db {
 
   }
 
+  public function action($action,$actionField,$table, $where = array())
+  {
+      if(count($where) === 3)
+      {
+          $conditionField = $where[0];
+          $operator = $where[1];
+          $value = $where[2];
+
+          $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
+          if(!$this->query($sql,array($value))->error())
+          {
+              return $this;
+          }
+          
+      }
+      return false;
+  }
+
+  public function get($table, $field, $where)
+  {
+      return $this->action('SELECT', $field, $table, $where);
+  }
+
+  public function delete($table, $where)
+  {
+      return $this->action('DELETE',$in,$table,$where);
+  }
+
+
   public function insert($table,$post = array())
   {
     $fields = array_keys($post);
