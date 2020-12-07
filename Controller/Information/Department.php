@@ -28,8 +28,17 @@ class Department implements InfoInterface {
 
     public function read($field, $table, $condition = array())
     {
-        $result = $this->db->get($table, $field, $condition);
-        return $result;
+        $x = 1;
+        $results = array();
+        foreach($this->db->get($table, $field, $condition) as $obj)
+        {
+            foreach($obj as $dept => $value)
+            {
+                $results[$x] = $value;
+                $x++;
+            }
+        }
+        return $results;
     }
 
     public function update()
