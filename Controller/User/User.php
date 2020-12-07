@@ -9,7 +9,5 @@ class User {
     function loginProcess(){
         
     }
-    function addInfo(){
-        echo 'User add info';
-    }
+
 }
