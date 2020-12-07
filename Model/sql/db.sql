@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS `db_employee_monitoring_system`;
 
 CREATE TABLE IF NOT EXISTS `tbl_employees` (
   `employee_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` int(2)  NOT NULL DEFAULT 1,
+  `role_id` int(2)  NOT NULL DEFAULT 2,
   `department_id` int(11) NOT NULL  DEFAULT 1,
   `emp_details_id` int(11) NOT NULL,
   `emp_id_number` varchar(255) NOT NULL,
@@ -17,11 +17,11 @@ CREATE TABLE IF NOT EXISTS `tbl_employee_details` (
   `middle_Name` varchar(30) NOT NULL,
   `last_Name` varchar(30) NOT NULL,
   `age`  int(3) NOT NULL,
-  `gender` VARCHAR(6) NOT NULL CHECK (`gender` IN ('Male', 'Female')),
+  `gender` VARCHAR(6) NOT NULL,
   `address` varchar(255) NOT NULL,
   `mobile_number` varchar(25) NOT NULL,
   `email` varchar(25) NOT NULL,
-  `emp_image` varchar(255) DEFAULT NULL,
+  `emp_image` varchar(255) DEFAULT 'default_image.jpg',
   `date_hire` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`emp_details_id`)
 )engine=InnoDB;
@@ -59,3 +59,16 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `tbl_attendance`
   ADD CONSTRAINT `fk_attendance_employees` FOREIGN KEY (`employee_id`) REFERENCES `tbl_employees`(`employee_id`)
 ON DELETE CASCADE ON UPDATE CASCADE;
+
+BEGIN;
+INSERT INTO tbl_department ()
+  VALUES();
+  INSERT INTO `tbl_role` ( `role`) VALUES ('Admin'),('Employee'); 
+SELECT LAST_INSERT_ID() INTO @role_id;
+INSERT INTO `tbl_employee_details`( `first_name`, `middle_name`,
+ `last_name`, `age`, `gender`, `address`, `mobile_number`, `email`) 
+VALUES ('juan','tamad','delacruz',31,'male','Q.C','09123456789','juan@gmail.com');
+ SELECT LAST_INSERT_ID() INTO @emp_details_id;
+INSERT INTO tbl_employees (`role_id`,`emp_details_id`,`emp_id_number`,`password`) 
+  VALUES(@role_id,@emp_details_id,'2020001','$2y$10$5C4dTYlFIqSQqJtOhYj7iejkrDEnnCp/c6zZS5nppaG18pCY9eUxC');
+COMMIT;

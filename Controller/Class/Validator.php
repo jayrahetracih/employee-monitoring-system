@@ -17,7 +17,7 @@ class Validator
 
             if ($rule === 'required' && empty($value)) {
 
-                $this->addError($item,$rules['name'] . " is {$rule}" . "<br>");
+                $this->addError($item,$name . " is {$rule}" . "<br>");
 
             }else if(!empty($value)){
 

@@ -3,7 +3,6 @@ require_once '../../../Controller/Information/InfoFactory.php';
 
 class Admin
 {
-
     function addInfo($type,$params)
     {
        $info_factory = new InfoFactory();

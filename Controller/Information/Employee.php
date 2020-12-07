@@ -1,20 +1,19 @@
 <?php 
 require_once '../../../Controller/Information/InfoInterface.php';
 require_once '../../../Controller/Class/Validator.php';
-require_once '../../../Model/Db.php';
+require_once '../../../Model/Employee_model.php';
 
-/**
- * undocumented class
- */
+
 class Employee implements InfoInterface{
 
-    private $db;
+    private $employee_model;
+    private $post;
 
     public function __construct($post=array())
     {
-        $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
+        $this->employee_model = new Employee_model();
     }
 
     public function timeIn(){
@@ -70,17 +69,18 @@ class Employee implements InfoInterface{
                 'email' => array(
                     'name' => 'Email',
                     'required' => true
-                )           
+                ),         
+                'password' => array(
+                    'name' => 'Password',
+                    'required' => true,
+                    'min' => 6
+                )         
             )); 
 
             if($validation->passed()) {
 
-                /* $execute_register['query_result'] =  parent::executeRegister($this->post);
-            
-                return $execute_register; */
-
-                echo 'Success';
-
+               return $this->employee_model->executeCreate($this->post);
+ 
             } else {
               
                 return  $validation->errors(); 
@@ -100,7 +100,5 @@ class Employee implements InfoInterface{
     public function changeStatus(){
         echo 'change employee status';
     }
-
-
 
 }
