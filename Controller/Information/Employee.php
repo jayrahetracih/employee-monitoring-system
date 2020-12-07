@@ -89,7 +89,7 @@ class Employee implements InfoInterface{
         }
     }
 
-    public function read(){
+    public function read($field, $table, $condition = array()){
         echo 'read employee info';
     }
 
