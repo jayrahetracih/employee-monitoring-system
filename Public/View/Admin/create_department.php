@@ -5,7 +5,7 @@
  
  $admin = new Admin();
  $post_result = $admin->addInfo('department', $_POST);
- $dept_obj = $admin->readInfo('department', 'department_id, department', 'department', array('department_status','=','Active'));
+ $dept_obj = $admin->readInfo('department', 'department_id, department', 'tbl_department', array('status','=','Active'));
 
  if(isset($_GET['department_id']))
  {
