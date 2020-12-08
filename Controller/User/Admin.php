@@ -22,10 +22,10 @@ class Admin
         return $info->read($fields, $table, $condition);
     }
 
-    function updateInfo($type, $table, $condition = array())
+    function updateInfo($type, $table, $set_values = array(), $condition = array())
     {
         $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->update($type, $table, $condition);
+        return $info->update($table, $set_values, $condition);
     }
       
 }
