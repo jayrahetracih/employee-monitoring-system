@@ -4,14 +4,15 @@
  include_once '../../../Controller/User/Admin.php';
  
  $admin = new Admin();
- $post_result = $admin->addInfo('department', $_POST);
+ $post_result = $admin->addInfo('department', 'tbl_department', $_POST);
+ print_r($post_result);
  $dept_obj = $admin->readInfo('department', 'department_id, department', 'tbl_department', array('status','=','Active'));
 
  if(isset($_GET['department_id']))
  {
-     if($admin->updateInfo('department', 'department', 
+     if($admin->updateInfo('department', 'tbl_department', 
      array(
-        'department_status' => 'Inactive'
+        'status' => 'Inactive'
      ), 
      array(
         'department_id', '=', $_GET['department_id']
@@ -60,11 +61,11 @@
             <?php foreach($results as $id => $dept): ?>
                 
                 <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $dept; ?> 
-                    <button class="btn btn-warning btn-sm" onclick="
-                                                                    $('#deptId').val(<?php echo $id; ?>);
-                                                                    $('#showChangeStatusModal').val(true);
-                                                                    $('#changeStatusForm').submit();
-                                                                    ">
+                    <button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
+                                                                            $('#deptId').val(<?php echo $id; ?>);
+                                                                            $('#showChangeStatusModal').val(true);
+                                                                            $('#changeStatusForm').submit();
+                                                                            ">
                     Archive</button>
                 </div>
             <?php endforeach; ?>

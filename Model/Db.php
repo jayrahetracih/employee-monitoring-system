@@ -145,6 +145,9 @@ class Db {
     }
     
     $sql = "UPDATE `$table` SET $set WHERE $field_identifier $operator $identifier_value";
+    echo $sql . "<br>";
+    print_r($child_post);
+    die();
     if(!$this->query($sql, $child_post)->error())
     {
         return true;

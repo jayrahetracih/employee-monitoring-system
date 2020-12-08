@@ -10,7 +10,7 @@ class Admin
         $this->info_factory = new InfoFactory();
     }
 
-    function addInfo($type,$params)
+    function addInfo($type, $table, $params)
     {
        $info = $this->info_factory->initializeInfo($type,$params);
        return $info->create();
