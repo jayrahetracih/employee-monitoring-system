@@ -8,7 +8,7 @@ class InfoFactory
         if ($type === 'employee') {
             return new Employee($params);
         } elseif ($type === 'department') {
-            return new Department();
+            return new Department($params);
         }
 
         throw new Exception("Unsupported Info");        

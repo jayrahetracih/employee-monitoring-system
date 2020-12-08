@@ -3,12 +3,29 @@ require_once '../../../Controller/Information/InfoFactory.php';
 
 class Admin
 {
+    private $info_factory;
+
+    public function __construct()
+    {
+        $this->info_factory = new InfoFactory();
+    }
 
     function addInfo($type,$params)
     {
-       $info_factory = new InfoFactory();
-       $info = $info_factory->initializeInfo($type,$params);
+       $info = $this->info_factory->initializeInfo($type,$params);
        return $info->create();
-    } 
+    }
+    
+    function readInfo($type, $fields, $table, $condition = array())
+    {
+        $info = $this->info_factory->initializeInfo($type, NULL);
+        return $info->read($fields, $table, $condition);
+    }
+
+    function updateInfo($type, $table, $condition = array())
+    {
+        $info = $this->info_factory->initializeInfo($type, NULL);
+        return $info->update($type, $table, $condition);
+    }
       
 }

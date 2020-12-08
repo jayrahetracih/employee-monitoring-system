@@ -94,6 +94,18 @@ class Db {
       return $this->action('DELETE',$in,$table,$where);
   }
 
+  public function update($table, $post = array(), $condition)
+  {
+    $fields = array_keys($post);
+    foreach($post as $key)
+    {
+      $child_post[$key] = $value;
+    }
+    
+    $sql = "UPDATE `$table` SET `". implode("`,", $fields . "` = ?") ."` WHERE $condition ";
+    echo $sql;
+  }
+
 
   public function insert($table,$post = array())
   {
