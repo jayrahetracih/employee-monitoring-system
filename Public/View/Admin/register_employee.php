@@ -28,7 +28,6 @@ $fields = array('name' => array(
 
 extract($fields);
 
-    
 ?>
 
 <?php include_once '../../../Public/layouts/header.php'; ?>

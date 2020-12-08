@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `tbl_employee_details` (
 
 CREATE TABLE IF NOT EXISTS   `tbl_department` (
     `department_id` INT(11) NOT NULL AUTO_INCREMENT ,
-    `department` varchar(11) NOT NULL DEFAULT 'Unassigned',
+    `department` varchar(100) NOT NULL DEFAULT 'Unassigned',
     `status` varchar(10) NOT NULL DEFAULT 'Active',
     PRIMARY KEY (`department_id`)
 )engine=InnoDB;

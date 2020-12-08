@@ -10,14 +10,10 @@ class Db {
             $_query,
             $_rowcount;
 
-
- 
-
     // Using  Singleton for db connection
     public function __construct()
     {
         try {
-
 
             $this->pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USERNAME,DB_PASSWORD);
 
@@ -45,7 +41,13 @@ class Db {
 
             $this->pdo->beginTransaction();    
             // Remove last two value of array
-            $employee_details = array_slice($post, 0, count($post) - 2);  
+            $employee_details = array_slice($post, 0, count($post) - 2); 
+            // Hash Password 
+            $password = password_hash($post['password'],PASSWORD_DEFAULT);
+            // select all users
+            $stmt = $this->pdo->query("SELECT employee_id FROM tbl_employees");
+            $number_of_employees = $stmt->rowCount();
+            $employee_number_id = date("Ym") . "000" . strval($number_of_employees + 1);
 
              // Insert the metadata of the employee_details into the database
             $stmt_employee_details = $this->pdo->prepare(
@@ -59,7 +61,7 @@ class Db {
             $stmt_employees = $this->pdo->prepare(
                 'INSERT INTO tbl_employees (`emp_details_id`,`emp_id_number`,`password`) 
                 VALUES(?,?,?)');
-            $stmt_employees->execute([$employee_details_id ,'20201',md5($post['password']) ]);
+            $stmt_employees->execute([$employee_details_id ,$employee_number_id,$password]);
             
             // Make the changes to the database permanent
             if ($this->pdo->commit()) {
