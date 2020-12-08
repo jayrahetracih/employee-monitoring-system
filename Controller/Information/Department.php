@@ -1,49 +1,64 @@
 <?php 
 require_once 'InfoInterface.php';
+require_once '../../../Controller/Class/Validator.php';
 require_once '../../../Model/Db.php';
 /**
  * undocumented class
  */
 class Department implements InfoInterface {
     private $db;
+    private $validator;
 
-    public function __construct()
+    public function __construct($post=array())
     {
         $this->db = Db::getInstance();
+        $this->post = $post;
+        $this->validator = new Validator();
     }
 
     public function create()
     {
-        if($this->db->insert('department', array(
-
-            'department' => $_POST['dept_name'],
-            'department_status' => 'Active'
-
-        )))
+        if(isset($_POST['btn_addDepartment']))
         {
-            return true;
+            $validation = $this->validator->checkInput($this->post , array(
+                'dept_name' => array(
+                    'name' => 'Department Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                )
+                ));
+
+            if($validation->passed())
+            {
+                if($this->db->insert('tbl_department', array(
+
+                    'department' => $_POST['dept_name'],
+                    'status' => 'Active'
+
+                )))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return $validation->errors();
+            }
         }
-        return false;
     }
 
     public function read($field, $table, $condition = array())
     {
-        $x = 1;
-        $results = array();
-        foreach($this->db->get($table, $field, $condition) as $obj)
-        {
-            foreach($obj as $dept => $value)
-            {
-                $results[$x] = $value;
-                $x++;
-            }
-        }
-        return $results;
+        return $this->db->get($table, $field, $condition);
     }
 
-    public function update()
+    public function update($table, $set_values = array(), $condition = array())
     {
-        
+        if($this->db->update($table, $set_values, $condition))
+        {
+            return true;
+        }
     }
 
 }
