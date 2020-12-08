@@ -93,7 +93,7 @@ class Employee implements InfoInterface{
         echo 'read employee info';
     }
 
-    public function update(){
+    public function update($table, $set_values = array(), $condition = array()){
         echo 'update employee info';
     }
 
