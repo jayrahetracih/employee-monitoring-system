@@ -31,7 +31,7 @@ class Department implements InfoInterface {
 
             if($validation->passed())
             {
-                /* if($this->db->insert('department', array(
+                if($this->db->insert('department', array(
 
                     'department' => $_POST['dept_name'],
                     'department_status' => 'Active'
@@ -39,7 +39,7 @@ class Department implements InfoInterface {
                 )))
                 {
                     return true;
-                } */
+                }
                 echo "Success";
             }
             else
@@ -54,9 +54,12 @@ class Department implements InfoInterface {
         return $this->db->get($table, $field, $condition);
     }
 
-    public function update()
+    public function update($table, $set_values = array(), $condition = array())
     {
-        
+        if($this->db->update($table, $set_values, $condition))
+        {
+            return true;
+        }
     }
 
 }
