@@ -2,11 +2,25 @@
  include_once '../../../Controller/Class/Validator.php';
  include_once '../../../Controller/Information/Department.php';
  include_once '../../../Controller/User/Admin.php';
+ include_once '../../../Model/Db.php';
  
  $admin = new Admin();
  $post_result = $admin->addInfo('department', $_POST);
  $dept_obj = $admin->readInfo('department', 'department_id, department', 'department', array('department_status','=','Active'));
 
+ if(isset($_GET['department_id']))
+ {
+     if($admin->updateInfo('department', 'department', 
+     array(
+        'department_status' => 'Inactive'
+     ), 
+     array(
+        'department_id', '=', $_GET['department_id']
+     )))
+     {
+         echo "Info Successfully Updated!";
+     }
+ }
 
 
 
@@ -49,6 +63,7 @@
                 <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $dept; ?> 
                     <button class="btn btn-warning btn-sm" onclick="
                                                                     $('#deptId').val(<?php echo $id; ?>);
+                                                                    $('#showChangeStatusModal').val(true);
                                                                     $('#changeStatusForm').submit();
                                                                     ">
                     Archive</button>
@@ -61,6 +76,7 @@
 
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
                 <input type="hidden" id="deptId" name="department_id">
+                <input type="hidden" id="showChangeStatusModal" name="showChangeStatusModal">
                 </form>
 
                 <!-- Hidden Form For Change Employee Status -->
@@ -104,26 +120,18 @@
         </div>
     </div><!--Alert Modal-->
 
-    <div class="modal fade" id="addDepartmentModal" role="dialog"><!--Add Department Modal-->
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <!-- Form Add Department -->
-                    
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div><!--Add Department Modal-->
-
-
-
 <?php include_once '../../../Public/layouts/footer.php'; ?>
+<script>
+$(document).ready(function(){
+
+    if($('#showChangeStatusModal').val === "true")
+    {
+        $('#message').html('Successfully Updated!');
+        $("#alertModal").modal("show");
+    }
+
+})
+</script>
 
 
 
