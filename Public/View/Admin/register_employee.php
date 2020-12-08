@@ -12,7 +12,8 @@ $fields = array('name' => array(
                     'age',
                     'address',
                     'mobile_number',
-                    'email'),
+                    'email',
+                    'password'),
                 'placeholder' => array(
                     'First Name',
                     'Middle Name',
@@ -21,7 +22,8 @@ $fields = array('name' => array(
                     'Age',
                     'Address',
                     'Mobile Number',
-                    'Email')
+                    'Email',
+                    'Password')
                 );
 
 extract($fields);
@@ -42,18 +44,30 @@ extract($fields);
 
                     <p class="h4 mb-4 text-center">Register Employee</p>
 
+                    <?php echo (!is_array($post_result)) ? $post_result : '' ;?>
+
                     <?php foreach ($placeholder as $key => $value): ?>
 
                         <?php if ($name[$key] == 'gender'): ?>
 
+                            <!-- Gender -->
                              <div class="form-group ">
                                 <select  name="<?php echo $name[$key]; ?>"  class="custom-select form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" >
                                     <option value="">Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
                                 </select> 
                                 <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
                             </div>
+
+                        <?php elseif ($name[$key] == 'password'): ?>
+
+                                <!-- Password -->
+                                 <div class="form-group">
+                                    <input type="password" class="form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
+                                    name="<?php echo $name[$key]; ?>" placeholder="<?php echo $placeholder[$key]; ?>">
+                                    <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
+                                </div>
 
                         <?php else: ?>
 
