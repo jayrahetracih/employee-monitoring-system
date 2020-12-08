@@ -31,16 +31,15 @@ class Department implements InfoInterface {
 
             if($validation->passed())
             {
-                if($this->db->insert('department', array(
+                if($this->db->insert('tbl_department', array(
 
                     'department' => $_POST['dept_name'],
-                    'department_status' => 'Active'
+                    'status' => 'Active'
 
                 )))
                 {
                     return true;
                 }
-                echo "Success";
             }
             else
             {
