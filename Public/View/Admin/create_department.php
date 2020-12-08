@@ -2,7 +2,6 @@
  include_once '../../../Controller/Class/Validator.php';
  include_once '../../../Controller/Information/Department.php';
  include_once '../../../Controller/User/Admin.php';
- include_once '../../../Model/Db.php';
  
  $admin = new Admin();
  $post_result = $admin->addInfo('department', $_POST);
