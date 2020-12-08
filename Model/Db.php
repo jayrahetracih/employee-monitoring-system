@@ -14,7 +14,7 @@ class Db {
  
 
     // Using  Singleton for db connection
-    private function __construct()
+    public function __construct()
     {
         try {
 
@@ -130,16 +130,28 @@ class Db {
       return $this->action('DELETE',$in,$table,$where);
   }
 
-  public function update($table, $post = array(), $condition)
+  public function update($table, $set_values = array(), $condition = array())
   {
-    $fields = array_keys($post);
-    foreach($post as $key)
+
+    $field_identifier = $condition[0];
+    $operator = $condition[1];
+    $identifier_value = $condition[2];
+
+    $set = '';
+    foreach($set_values as $field => $value)
     {
-      $child_post[$key] = $value;
+        $set .= $field . " = ?";
+        $child_post[$field] = $value;
     }
     
-    $sql = "UPDATE `$table` SET `". implode("`,", $fields . "` = ?") ."` WHERE $condition ";
-    echo $sql;
+    $sql = "UPDATE `$table` SET $set WHERE $field_identifier $operator $identifier_value";
+    if(!$this->query($sql, $child_post)->error())
+    {
+        return true;
+    }
+    
+    return false; 
+
   }
 
 
