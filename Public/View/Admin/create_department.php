@@ -43,32 +43,51 @@
    
     <div class ="container"> 
 
-        <!-- row -->
-        <div class="row">
-
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4 border border-secondary">
-            
-            <p class="h4 mb-4 text-center border-bottom">Active Departments</p>
-            
-            <?php if(empty($results)): ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1">No Departments Yet</div>
+    <table class="table table-striped table-bordered">
+    <thead>
+      <tr class="d-flex">
+        <th class="col-8">Department Name</th>
+        <th class="col-4"> Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if(empty($results)): ?>
+                <tr class="d-flex">
+                    <td class="col-12">No Departments Yet</td>
+                </tr>
             <?php endif; ?>
 
             <?php foreach($results as $id => $dept): ?>
                 
-                <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $dept; ?> 
-                    <button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
+                <tr class="d-flex" >
+                    <td class="col-<?php echo $dept == 'Unassigned' ? '12' : '8' ?>"><?php echo $dept; ?></td>
+                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
                                                                             $('#deptId').val(<?php echo $id; ?>);
                                                                             $('#Modal').val(true);
-                                                                            $('#message').val('<?php echo $dept; ?> Updated');
+                                                                            $('#message').append('<?php echo $dept; ?> Updated');
                                                                             $('#changeStatusForm').submit();
                                                                             ">
-                    Archive</button>
-                </div>
+                    Archive</button></td>
+                </tr>
             <?php endforeach; ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1"><a href="#" onClick="$('#add').css('display','block');">Add Department</a></div>
-            </div>
-                
+                <tr class="d-flex">
+                    <td class="col-12"><a href="#" onClick="$('#add').toggleClass('d-none');">Add Department</a></td>
+                </tr>
+                <tr class="d-none" id="add">
+                    <td class="col-12">
+                        <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                        <p class="h4 mb-4 text-center">Add Department</p>
+                        <div class="form-group">
+                            <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
+                            name="dept_name" placeholder="Department Name" autocomplete="off">
+                            <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
+                        </div>
+                        <button type="submit" class="btn btn-info  btn-block" name="btn_addDepartment" >Submit</button>
+                        </form><!--Form Add Department -->
+                    </td>
+                </tr>
+    </tbody>
+  </table>
                 <!-- Hidden Form For Change Employee Status -->
 
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
@@ -77,26 +96,7 @@
                 </form>
 
                 <!-- Hidden Form For Change Employee Status -->
-
-        </div> <!-- row -->
-
-        <!-- row -->
-        <div class="row" id="add" style="display:<?php echo isset($post_result['dept_name'])? 'block' : 'none'; ?>">
-
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4 border border-secondary">
-            
-            <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
-                <p class="h4 mb-4 text-center">Add Department</p>
-                <div class="form-group">
-                    <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
-                    name="dept_name" placeholder="Department Name" autocomplete="off">
-                    <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
-                </div>
-                <button type="submit" class="btn btn-info  btn-block" name="btn_addDepartment" >Submit</button>
-            </form><!--Form Add Department -->
-         
-        </div> <!-- row -->
-
+                
     </div><!-- container -->
 
 
@@ -138,7 +138,7 @@ $(document).ready(function(){
 
     var modal = $.trim(getUrlParameter('Modal')); 
     console.log(modal);
-    if(!modal)
+    if(modal == "true")
     {
         $("#alertModal").modal("show");
     }
