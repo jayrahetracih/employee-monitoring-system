@@ -31,7 +31,6 @@ class Department implements InfoInterface {
 
             if($validation->passed())
             {
-                
                 if($this->db->insert('tbl_department', array(
 
                     'department' => $_POST['dept_name'],

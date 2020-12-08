@@ -86,7 +86,6 @@ class Db {
           $this->_query->bindValue($x, $param);
           $x++;
         }
-
       if($this->_query->execute())
       {
         $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
@@ -145,9 +144,6 @@ class Db {
     }
     
     $sql = "UPDATE `$table` SET $set WHERE $field_identifier $operator $identifier_value";
-    echo $sql . "<br>";
-    print_r($child_post);
-    die();
     if(!$this->query($sql, $child_post)->error())
     {
         return true;
@@ -160,6 +156,7 @@ class Db {
 
   public function insert($table,$post = array())
   {
+    
     $fields = array_keys($post);
 
     foreach($post as $key => $value)
@@ -167,7 +164,7 @@ class Db {
         $child_post[$key] = $value;
         $post[$key] ='?';
     }
-
+    
      $sql = "INSERT INTO $table (`". implode('`, `', $fields) ."`) VALUES (". implode(', ', $post) .")";
      
     if(!$this->query($sql, $child_post)->error())

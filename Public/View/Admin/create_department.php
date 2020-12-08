@@ -5,21 +5,17 @@
  
  $admin = new Admin();
  $post_result = $admin->addInfo('department', 'tbl_department', $_POST);
- print_r($post_result);
  $dept_obj = $admin->readInfo('department', 'department_id, department', 'tbl_department', array('status','=','Active'));
 
  if(isset($_GET['department_id']))
  {
-     if($admin->updateInfo('department', 'tbl_department', 
+     $admin->updateInfo('department', 'tbl_department', 
      array(
         'status' => 'Inactive'
      ), 
      array(
         'department_id', '=', $_GET['department_id']
-     )))
-     {
-         echo "Info Successfully Updated!";
-     }
+     ));
  }
 
 
@@ -63,7 +59,8 @@
                 <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $dept; ?> 
                     <button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
                                                                             $('#deptId').val(<?php echo $id; ?>);
-                                                                            $('#showChangeStatusModal').val(true);
+                                                                            $('#Modal').val(true);
+                                                                            $('#message').val('<?php echo $dept; ?> Updated');
                                                                             $('#changeStatusForm').submit();
                                                                             ">
                     Archive</button>
@@ -76,7 +73,7 @@
 
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
                 <input type="hidden" id="deptId" name="department_id">
-                <input type="hidden" id="showChangeStatusModal" name="showChangeStatusModal">
+                <input type="hidden" id="Modal" name="Modal">
                 </form>
 
                 <!-- Hidden Form For Change Employee Status -->
@@ -113,7 +110,7 @@
                 <div id="message"class="modal-body bg-success text-white font-weight-bold">
                 </div>
                 <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.reload()">Close</button>
+                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.header('create_department.php');">Close</button>
                 </div>
             </div>
 
@@ -124,9 +121,25 @@
 <script>
 $(document).ready(function(){
 
-    if($('#showChangeStatusModal').val === "true")
+    var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    };
+
+    var modal = $.trim(getUrlParameter('Modal')); 
+    console.log(modal);
+    if(!modal)
     {
-        $('#message').html('Successfully Updated!');
         $("#alertModal").modal("show");
     }
 
