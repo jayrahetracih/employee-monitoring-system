@@ -130,10 +130,17 @@ class Db {
             }
 
             $query = implode(' ',array_values($query_array));
+
+            extract($where);
+            extract($clause);
+            $w = $reference_table . '.' . $clause_field . $clause_operator . "'" . $clause_value . "'";
+            $query .= " WHERE {$w}";
+
             $columns = implode(',',array_values($actionField));
 
             $sql = "SELECT {$columns} FROM {$main_table} {$query}";
             
+            die($sql);
             $stmt = $this->pdo->prepare($sql);
             if($stmt->execute())
             {
