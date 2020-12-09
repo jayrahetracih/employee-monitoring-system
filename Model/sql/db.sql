@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS `tbl_employees` (
 
 CREATE TABLE IF NOT EXISTS `tbl_employee_details` (
   `emp_details_id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_Name` varchar(30) NOT NULL,
-  `middle_Name` varchar(30) NOT NULL,
-  `last_Name` varchar(30) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `middle_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
   `age`  int(3) NOT NULL,
   `gender` VARCHAR(6) NOT NULL,
   `address` varchar(255) NOT NULL,

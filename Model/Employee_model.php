@@ -14,4 +14,9 @@ class Employee_model
         return $this->db->insertWithTransaction($post);
       
     }
+
+    function executeRead()
+    { 
+        return $this->db->select('tbl_employees','*','tbl_employee_details','emp_details_id');
+    }
 }

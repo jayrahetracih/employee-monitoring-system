@@ -76,6 +76,14 @@ class Db {
         }
     }
 
+    public function select($table,$column,$join_table,$join_id){
+
+    $stmt = $this->pdo->prepare("SELECT {$column} FROM {$table} INNER JOIN {$join_table}
+    ON {$table}.{$join_id} = {$join_table}.{$join_id}");
+        $stmt->execute(); 
+        return $stmt->fetchAll();
+    }
+
   public function query($sql, $params = array())
   {
 
