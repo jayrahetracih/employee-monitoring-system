@@ -110,18 +110,58 @@ class Db {
 
   }
 
-  public function action($action,$actionField,$table, $where = array())
+  public function action($action,$actionField,$tables, $where = array())
   {
       if(count($where) === 3)
       {
+
           $conditionField = $where[0];
           $operator = $where[1];
           $value = $where[2];
 
-          $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
-          if(!$this->query($sql,array($value))->error())
+          if(!is_array($tables))
           {
-              return $this;
+               $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
+               if(!$this->query($sql,array($value))->error())
+               {
+                   return $this;
+               }
+          }
+          else
+          {              
+//$fields = array(
+//
+//     'tbl_employees' => array(
+//          'employee_id_number'
+//      ),
+//     'tbl_employee_details' => array(
+//          '*'
+//     ));
+// Usage
+               
+               $columns = array();
+               $sqlFields = '';
+               foreach($actionField as $key)
+               {
+                   $columns[$key] = '';
+                   foreach($key as $col => $value)
+                   {
+                        array_push($columns[$key], $value);
+                   }
+                   $arrKey = array_search($columns[$key],$columns);
+                   $sqlFields .= $arrKey . '.' . implode(" ,{$arrKey}.", $columns[$key]);
+                }
+                $sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
+                .
+                $conditionField = $where[0];
+                $operator       = $where[1];
+                $value          = $where[2];
+
+                $sql = "SELECT $sqlFields FROM $sqlTables ON $conditionField $operator ?";
+                if(!$this->query($sql,array($value))->error())
+                {
+                   return $this;
+                }
           }
           
       }
