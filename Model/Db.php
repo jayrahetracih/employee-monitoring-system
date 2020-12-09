@@ -120,19 +120,31 @@ class Db {
                }
           }
           elseif(count($table) == 2)
-          {
+          {              
+//$fields = array(
+//
+//     'tbl_employees' => array(
+//          'employee_id_number'
+//      ),
+//     'tbl_employee_details' => array(
+//          '*'
+//     ));
+// Usage
+               foreach($field as $key)
+               {
+                   foreach($key as $col => $value)
+                   {
+                   .
+                        array_push($column[$key], $value);
+                   .
+                   }
+                   .
+                   .
+                   .
 
-               
-$fields = array(
-
-     'tbl_employees' => array(
-            
-      ),
-
-);
-
+                }
                //Process Join Table
-               //$sql = "SELECT $table[0].employee_id_number, $table[1].* FROM `tbl_employees` INNER JOIN `$table[0]` ON $table[1].emp_details_id = $table[1].emp_details_id";
+               //$sql = "SELECT $table[0].employee_id_number, $table[1].* FROM `$table[0]` INNER JOIN `$table[1]` ON $table[1].emp_details_id = $table[0].emp_details_id";
 
           }
           
