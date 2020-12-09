@@ -102,7 +102,7 @@ class Db {
 
   }
 
-  public function action($action,$actionField,$tables, $where = array())
+  public function action($action,$actionField,$tables, $join_id, $where = array())
   {
 
         if(!is_array($tables))
@@ -121,49 +121,32 @@ class Db {
             }
         }
         else
-        {                          
-        $colKeys = array_keys($actionField);
-        $sqlFields = '';
-        $x = 0;
-        foreach($actionField as $key)
         {
-            $columns[$colKeys[$x]] = array();                
-            foreach($key as $col => $value)
+            extract($tables);
+            foreach($join_table as $key => $value)
             {
-                array_push($columns[$colKeys[$x]], $value);
+                $query_array[$key] = "INNER JOIN {$join_table[$key]} 
+                ON {$main_table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
             }
-            $sqlFields .= $x === count($columns[$colKeys[$x]]) ?
-                            $colKeys[$x] . '.' . implode(", {$colKeys[$x]}.", $columns[$colKeys[$x]]) . ' ' :
-                            $colKeys[$x] . '.' . implode(", {$colKeys[$x]}.", $columns[$colKeys[$x]]) . ', ';
-            $x++;
-        }
-        
-        $sqlTables = '';
-        $tblCounter = 0;
-        $onCounter = 0;
-        do
-        {
-            $sqlTables .= "`{$tables[$tblCounter]}` INNER JOIN `{$tables[$tblCounter + 1]}` ON {$tables[$tblCounter]}.{$where[$onCounter]} = {$tables[$tblCounter + 1]}.{$where[$onCounter]}";
-            $tblCounter = $tblCounter + 2; 
-            $onCounter++;
-        }while($x != count($tables));
 
-        //$sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
+            $query = implode(' ',array_values($query_array));
+            $columns = implode(',',array_values($actionField));
 
-        $sql = "SELECT $sqlFields FROM $sqlTables";
+            $sql = "SELECT {$columns} FROM {$main_table} {$query}";
+            
+            $stmt = $this->pdo->prepare($sql);
+            if($stmt->execute())
+            {
+            return $stmt->fetchAll(); 
+            }
 
-        echo $sql;
-        /* if(!$this->query($sql,array($value))->error())
-        {
-            return $this;
-        } */
         }
         return false;
   }
 
-  public function get($table, $field, $where)
+  public function get($table, $field, $join_id, $where)
   {
-      $this->action('SELECT', $field, $table, $where);
+      $this->action('SELECT', $field, $table, $join_id, $where);
       return $this->_results;
   }
 
