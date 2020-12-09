@@ -138,14 +138,19 @@ class Db {
             $x++;
         }
         
-        
-        $sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
-        
-        $conditionField = $where[0];
-        $operator       = $where[1];
-        $value          = $where[2];
+        $sqlTables = '';
+        $tblCounter = 0;
+        $onCounter = 0;
+        do
+        {
+            $sqlTables .= "`{$tables[$tblCounter]}` INNER JOIN `{$tables[$tblCounter + 1]}` ON {$tables[$tblCounter]}.{$where[$onCounter]} = {$tables[$tblCounter + 1]}.{$where[$onCounter]}";
+            $tblCounter = $tblCounter + 2; 
+            $onCounter++;
+        }while($x != count($tables));
 
-        $sql = "SELECT $sqlFields FROM $sqlTables ON $conditionField $operator ?";
+        //$sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
+
+        $sql = "SELECT $sqlFields FROM $sqlTables";
 
         echo $sql;
         /* if(!$this->query($sql,array($value))->error())
