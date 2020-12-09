@@ -3,14 +3,11 @@ require_once '../../../Controller/User/Admin.php';
 
 $admin = new Admin();
 $result = $admin->tempReadInfo('employee');
-echo '<pre>';
-//print_r($result);
-echo '</pre>';
+
 ?>
 
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
-   
     <div class ="container-fluid"> 
 
               <!-- Table -->
@@ -19,6 +16,7 @@ echo '</pre>';
                     <tr>
                     <th scope="col">Full Name</th>
                     <th scope="col">ID Number</th>
+                    <th scope="col">Department</th>
                     <th scope="col">Age</th>
                     <th scope="col">Gender</th>
                     <th scope="col">Address</th>
@@ -34,6 +32,7 @@ echo '</pre>';
                       <tr>
                         <td><?php echo ucfirst($value['first_name']) .' '. ucfirst($value['middle_name'][0]).'. '. ucfirst($value['last_name'])?></td>
                         <td><?php echo $value['emp_id_number'] ?></td>
+                        <td><?php echo $value['department'] ?></td>
                         <td><?php echo $value['age'] ?></td>
                         <td><?php echo $value['gender'] ?></td>
                         <td><?php echo $value['address'] ?></td>
@@ -43,16 +42,16 @@ echo '</pre>';
                         <td><?php echo date('m/d/y', strtotime($value['date_hire'])) ?></td>
                         <td>
 
-<div class="btn-group">
-  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Action
-  </button>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">View</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Action
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#">View</a>
+                              <a class="dropdown-item" href="#">Another action</a>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                          </div>
 
                         </td>
                       </tr>                
@@ -61,6 +60,5 @@ echo '</pre>';
                 </table> <!-- "table table-hover mt-4 -->
          
     </div><!-- container -->
-
 
 <?php include_once '../../../Public/layouts/footer.php'; ?>
