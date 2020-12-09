@@ -76,6 +76,37 @@ class Db {
         }
     }
 
+    public function select($table,$read_data){
+
+       if (array_key_exists('join_table',$read_data)) {
+
+            extract($read_data);
+
+            $query_array = array();
+
+            foreach ($join_table as $key => $value) {
+                $query_array[$key] = "INNER JOIN {$join_table[$key]} 
+                ON {$table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
+            } 
+
+            $query = implode(' ',array_values($query_array));
+
+       }else {
+           echo 'this is for single table';
+       }
+
+        $column = implode(',',array_values($column));
+
+        $sql = "SELECT {$column} FROM {$table} {$query}";
+
+      
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(); 
+
+        return $stmt->fetchAll(); 
+    }
+
   public function query($sql, $params = array())
   {
 
@@ -102,18 +133,59 @@ class Db {
 
   }
 
-  public function action($action,$actionField,$table, $where = array())
+  public function action($action,$actionField,$tables, $where = array())
   {
       if(count($where) === 3)
       {
+
           $conditionField = $where[0];
           $operator = $where[1];
           $value = $where[2];
 
-          $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
-          if(!$this->query($sql,array($value))->error())
+          if(!is_array($tables))
           {
-              return $this;
+               $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
+               if(!$this->query($sql,array($value))->error())
+               {
+                   return $this;
+               }
+          }
+          else
+          {              
+//$fields = array(
+//
+//     'tbl_employees' => array(
+//          'employee_id_number'
+//      ),
+//     'tbl_employee_details' => array(
+//          '*'
+//     ));
+// Usage
+               
+               $columns = array();
+               $sqlFields = '';
+               foreach($actionField as $key)
+               {
+                   $columns[$key] = '';
+                   foreach($key as $col => $value)
+                   {
+                        array_push($columns[$key], $value);
+                   }
+                   $arrKey = array_search($columns[$key],$columns);
+                   $sqlFields .= $arrKey . '.' . implode(" ,{$arrKey}.", $columns[$key]);
+                }
+                $sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
+                
+                $conditionField = $where[0];
+                $operator       = $where[1];
+                $value          = $where[2];
+
+                $sql = "SELECT $sqlFields FROM $sqlTables ON $conditionField $operator ?";
+
+                if(!$this->query($sql,array($value))->error())
+                {
+                   return $this;
+                }
           }
           
       }
