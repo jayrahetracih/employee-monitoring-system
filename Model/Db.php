@@ -102,7 +102,7 @@ class Db {
 
   }
 
-  public function action($action,$actionField,$table, $where = array())
+  public function action($action,$actionField,$tables, $where = array())
   {
       if(count($where) === 3)
       {
@@ -111,15 +111,15 @@ class Db {
           $operator = $where[1];
           $value = $where[2];
 
-          if(!is_array($table))
+          if(!is_array($tables))
           {
-               $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
+               $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
                if(!$this->query($sql,array($value))->error())
                {
                    return $this;
                }
           }
-          elseif(count($table) == 2)
+          else
           {              
 //$fields = array(
 //
@@ -130,22 +130,30 @@ class Db {
 //          '*'
 //     ));
 // Usage
-               foreach($field as $key)
+               
+               $columns = array();
+               $sqlFields = '';
+               foreach($actionField as $key)
                {
+                   $columns[$key] = '';
                    foreach($key as $col => $value)
                    {
-                   .
-                        array_push($column[$key], $value);
-                   .
+                        array_push($columns[$key], $value);
                    }
-                   .
-                   .
-                   .
-
+                   $arrKey = array_search($columns[$key],$columns);
+                   $sqlFields .= $arrKey . '.' . implode(" ,{$arrKey}.", $columns[$key]);
                 }
-               //Process Join Table
-               //$sql = "SELECT $table[0].employee_id_number, $table[1].* FROM `$table[0]` INNER JOIN `$table[1]` ON $table[1].emp_details_id = $table[0].emp_details_id";
+                $sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
+                .
+                $conditionField = $where[0];
+                $operator       = $where[1];
+                $value          = $where[2];
 
+                $sql = "SELECT $sqlFields FROM $sqlTables ON $conditionField $operator ?";
+                if(!$this->query($sql,array($value))->error())
+                {
+                   return $this;
+                }
           }
           
       }
