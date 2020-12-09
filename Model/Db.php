@@ -106,14 +106,23 @@ class Db {
   {
       if(count($where) === 3)
       {
-          $conditionField = $where[0];
-          $operator = $where[1];
-          $value = $where[2];
-
-          $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
-          if(!$this->query($sql,array($value))->error())
+          if(!is_array($table))
           {
-              return $this;
+               $conditionField = $where[0];
+               $operator = $where[1];
+               $value = $where[2];
+
+               $sql = "$action $actionField FROM $table WHERE $conditionField $operator ?";
+               if(!$this->query($sql,array($value))->error())
+               {
+                   return $this;
+               }
+          }else
+          {
+
+               //Process Join Table
+               //$sql = "SELECT tbl_employees.employee_id_number, tbl_employee_details.* FROM `tbl_employees` INNER JOIN `tbl_employee_details` ON tbl_employee_details.emp_details_id = tbl_employees.emp_details_id";
+
           }
           
       }
