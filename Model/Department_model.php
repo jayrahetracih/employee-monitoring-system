@@ -1,9 +1,17 @@
 <?php
+require_once '../../../Model/Db.php';
 class Department_model
 {
-    function get_data()
+    private $db;
+
+    private function __construct()
     {
-        $dept_obj = $admin->readInfo(
+        $this->db = Db::getInstance();
+    }
+
+    function getData()
+    {
+        $dept_obj = $this->db->get(
             'department',
             'department_id, department',
             'tbl_department',
