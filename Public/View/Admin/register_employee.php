@@ -33,7 +33,22 @@ extract($fields);
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
 <section id="cover">
-   
+
+    <div class="sidebar">
+        <a href="#home">Home</a>
+        <button class="emp-btn">Employee
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="employee-dropdown-container">
+            <a href="#">Register Employee</a>
+            <a href="#">Edit Employee</a>
+            <a href="#">Past Employee</a>
+        </div>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+    </div>
+
     <div class ="container"> 
         <!-- row -->
         <div class="row ">
