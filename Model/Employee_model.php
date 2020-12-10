@@ -17,10 +17,18 @@ class Employee_model
 
     function executeRead()
     { 
-        $read_data = array('column'=> array('*'),
+        /* $read_data = array('column'=> array('*'),
                             'join_table'=> array('tbl_employee_details','tbl_department'),
                             'join_id'=> array('emp_details_id','department_id'));
 
-        return $this->db->select('tbl_employees',$read_data);
+        return $this->db->select('tbl_employees',$read_data); */
+
+
+        $read_data = array('column'=> array('*'),
+                            'join_table'=> array('tbl_employee_details','tbl_department'),
+                            'join_id'=> array('emp_details_id','department_id'),
+                            'condition'=>array('condition_field' => 'status','operator'=> '=','value'=> 'Active'));
+
+        return $this->db->get('tbl_employees',$read_data);
     }
 }

@@ -133,69 +133,92 @@ class Db {
 
   }
 
-  public function action($action,$actionField,$tables, $where = array())
+  public function action($action,$table,$read_data)
   {
-      if(count($where) === 3)
-      {
 
-          $conditionField = $where[0];
-          $operator = $where[1];
-          $value = $where[2];
+    if (array_key_exists('join_tablek',$read_data)) {
 
-          if(!is_array($tables))
-          {
-               $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
-               if(!$this->query($sql,array($value))->error())
-               {
-                   return $this;
-               }
-          }
-          else
-          {              
-//$fields = array(
-//
-//     'tbl_employees' => array(
-//          'employee_id_number'
-//      ),
-//     'tbl_employee_details' => array(
-//          '*'
-//     ));
-// Usage
-               
-               $columns = array();
-               $sqlFields = '';
-               foreach($actionField as $key)
-               {
-                   $columns[$key] = '';
-                   foreach($key as $col => $value)
-                   {
-                        array_push($columns[$key], $value);
-                   }
-                   $arrKey = array_search($columns[$key],$columns);
-                   $sqlFields .= $arrKey . '.' . implode(" ,{$arrKey}.", $columns[$key]);
-                }
-                $sqlTables = "`" . implode("` INNER JOIN `", $tables) . "`";
-                
+            extract($read_data);
+
+            $join_table_query = array();
+
+            foreach ($join_table as $key => $value) {
+                $join_table_query[$key] = "INNER JOIN {$join_table[$key]} 
+                ON {$table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
+            } 
+
+            $join_table_query  = implode(' ',array_values($join_table_query)); 
+            echo 'one';
+
+
+       }elseif(array_key_exists('condition',$read_data)) {
+
+            echo 'two';
+
+            extract($read_data);
+
+            $condition_query = array();
+
+            foreach ($condition as $key => $value) {
+                $condition_query[$key] = "WHERE {$condition['condition_field']} {$condition['operator']} {$condition['value']}";
+            } 
+
+            $condition_query  = implode(' ',array_values($condition_query));
+       }
+
+       echo  $condition_query;
+
+
+die();
+        /* if(!is_array($tables))
+        {
+            if(count($where) === 3)
+            {
                 $conditionField = $where[0];
-                $operator       = $where[1];
-                $value          = $where[2];
+                $operator = $where[1];
+                $value = $where[2];
 
-                $sql = "SELECT $sqlFields FROM $sqlTables ON $conditionField $operator ?";
-
+                $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
                 if(!$this->query($sql,array($value))->error())
                 {
-                   return $this;
+                    return $this;
                 }
-          }
-          
-      }
-      return false;
+            }
+        }
+        else
+        {
+            extract($tables);
+            foreach($join_table as $key => $value)
+            {
+                $query_array[$key] = "INNER JOIN {$join_table[$key]} 
+                ON {$main_table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
+            }
+
+            $query = implode(' ',array_values($query_array));
+
+            extract($where);
+            extract($clause);
+            $w = $reference_table . '.' . $clause_field . $clause_operator . "'" . $clause_value . "'";
+            $query .= " WHERE {$w}";
+
+            $columns = implode(',',array_values($actionField));
+
+            $sql = "SELECT {$columns} FROM {$main_table} {$query}";
+            
+            die($sql);
+            $stmt = $this->pdo->prepare($sql);
+            if($stmt->execute())
+            {
+            return $stmt->fetchAll(); 
+            }
+
+        }
+        return false; */
   }
 
-  public function get($table, $field, $where)
+  public function get($table,$read_data)
   {
-      $this->action('SELECT', $field, $table, $where);
-      return $this->_results;
+    return $this->action('SELECT',$table,$read_data);
   }
 
   public function delete($table, $where)
