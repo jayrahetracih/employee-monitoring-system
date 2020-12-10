@@ -1,43 +1,102 @@
 <?php
  include_once '../../../Controller/Class/Validator.php';
  include_once '../../../Controller/Information/Department.php';
+ include_once '../../../Controller/User/Admin.php';
  
+ $admin = new Admin();
+ $post_result = $admin->addInfo('department', 'tbl_department', $_POST);
+ $dept_obj = $admin->readInfo('department', 'department_id, department', 'tbl_department', array('status','=','Active'));
 
- $dept = new Department();
+ if(isset($_GET['department_id']))
+ {
+     $admin->updateInfo('department', 'tbl_department', 
+     array(
+        'status' => 'Inactive'
+     ), 
+     array(
+        'department_id', '=', $_GET['department_id']
+     ));
+ }
 
- $dept_obj = $dept->read('department', 'department', array('department_status','=','Active'));
+
+
+ $results = array();
+ //Extract array data from array object $dept_obj and store to respective columns
+ $array_dept    = array_column($dept_obj, 'department');
+ $array_id      = array_column($dept_obj, 'department_id');
+
+ $x=0;
+ //Merge those two arrays
+ foreach($array_id as $id)
+ {
+     $results[$id] = $array_dept[$x];
+     $x++;
+ }
+
+ 
 
 ?>
 
-
-<link href="css/simple-sidebar.css" rel="stylesheet">
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
 <section id="cover">
    
     <div class ="container"> 
 
-        <!-- row -->
-        <div class="row">
-
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4 border border-secondary">
-            
-            <p class="h4 mb-4 text-center border-bottom">Active Departments</p>
-            
-            <?php if(empty($dept_obj)): ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1">No Departments Yet</div>
+    <table class="table table-striped table-bordered">
+    <thead>
+      <tr class="d-flex">
+        <th class="col-8">Department Name</th>
+        <th class="col-4"> Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if(empty($results)): ?>
+                <tr class="d-flex">
+                    <td class="col-12">No Departments Yet</td>
+                </tr>
             <?php endif; ?>
 
-            <?php foreach($dept_obj as $obj => $value): ?>
+            <?php foreach($results as $id => $dept): ?>
                 
-                <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $value; ?></div>
-
+                <tr class="d-flex" >
+                    <td class="col-<?php echo $dept == 'Unassigned' ? '12' : '8' ?>"><?php echo $dept; ?></td>
+                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
+                                                                            $('#deptId').val(<?php echo $id; ?>);
+                                                                            $('#Modal').val(true);
+                                                                            $('#message').append('<?php echo $dept; ?> Updated');
+                                                                            $('#changeStatusForm').submit();
+                                                                            ">
+                    Archive</button></td>
+                </tr>
             <?php endforeach; ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1"><a href="#" onClick="$('#addDepartmentModal').modal('show');">Add Department</a></div>
-            </div>
-         
-        </div> <!-- row -->
+                <tr class="d-flex">
+                    <td class="col-12"><a href="#" onClick="$('#add').toggleClass('d-none');">Add Department</a></td>
+                </tr>
+                <tr class="d-none" id="add">
+                    <td class="col-12">
+                        <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                        <p class="h4 mb-4 text-center">Add Department</p>
+                        <div class="form-group">
+                            <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
+                            name="dept_name" placeholder="Department Name" autocomplete="off">
+                            <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
+                        </div>
+                        <button type="submit" class="btn btn-info  btn-block" name="btn_addDepartment" >Submit</button>
+                        </form><!--Form Add Department -->
+                    </td>
+                </tr>
+    </tbody>
+  </table>
+                <!-- Hidden Form For Change Employee Status -->
 
+                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
+                <input type="hidden" id="deptId" name="department_id">
+                <input type="hidden" id="Modal" name="Modal">
+                </form>
+
+                <!-- Hidden Form For Change Employee Status -->
+                
     </div><!-- container -->
 
 
@@ -51,63 +110,41 @@
                 <div id="message"class="modal-body bg-success text-white font-weight-bold">
                 </div>
                 <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.reload()">Close</button>
+                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.header('create_department.php');">Close</button>
                 </div>
             </div>
 
         </div>
     </div><!--Alert Modal-->
 
-    <div class="modal fade" id="addDepartmentModal" role="dialog"><!--Add Department Modal-->
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <!-- Form Add Department -->
-                    <form id="frm" class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
-                        <p class="h4 mb-4 text-center">Add Department</p>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="dept_name" placeholder="Department Name" autocomplete="off">
-                            <span class="invalid-feedback" ></span>
-                        </div>
-                        <input type="submit" class="btn btn-info  btn-block" name="btn_add" value="Submit" onClick="$('#addDepartmentModal').modal('hide');">
-                    </form><!--Form Add Department -->
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div><!--Add Department Modal-->
-
-
-
 <?php include_once '../../../Public/layouts/footer.php'; ?>
 <script>
-$(document).ready(function() {
+$(document).ready(function(){
 
-// process the form
-$('form').submit(function(event) {
-    event.preventDefault();
-    // process the form
-    $.ajax({
-        type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-        url         : 'Process_Department.php', // the url where we want to POST
-        dataType    : 'json', // define data type
-        data        : $("#frm").serialize(), // our data object
-        success     : function(data) //execute this function if success
-        {
-            console.log(data);
-            $("#message").html(data.message);
-            $("#alertModal").modal("show");
+    var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
-    });
+    }
+    };
 
-});
+    var modal = $.trim(getUrlParameter('Modal')); 
+    console.log(modal);
+    if(modal == "true")
+    {
+        $("#alertModal").modal("show");
+    }
 
-});
+})
 </script>
+
 
 

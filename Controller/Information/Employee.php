@@ -90,10 +90,11 @@ class Employee implements InfoInterface{
     }
 
     public function read(){
-        echo 'read employee info';
+
+        return $this->employee_model->executeRead();
     }
 
-    public function update(){
+    public function update($table, $set_values = array(), $condition = array()){
         echo 'update employee info';
     }
 
