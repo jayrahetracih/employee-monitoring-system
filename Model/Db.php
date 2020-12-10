@@ -34,7 +34,13 @@ class Db {
         }
         return self::$instance;
     }
-
+    
+    /**
+     * Insert data into multiple table from ($post = $_POST) using Transaction
+     *
+     * @param  array $post
+     * @return void
+     */
     public function insertWithTransaction($post = array())
     {
         try {
@@ -75,69 +81,20 @@ class Db {
             throw $e;
         }
     }
+    
+    /**
+     * Check data if it has join_table,condition and logical operator
+     *
+     * @param  string $table
+     * @param  array $read_data
+     * @return string $query
+     */
+    public function checkQuery($table,$read_data)
+    {
+        $query = '';
 
-    public function select($table,$read_data){
-
-       if (array_key_exists('join_table',$read_data)) {
-
-            extract($read_data);
-
-            $query_array = array();
-
-            foreach ($join_table as $key => $value) {
-                $query_array[$key] = "INNER JOIN {$join_table[$key]} 
-                ON {$table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
-            } 
-
-            $query = implode(' ',array_values($query_array));
-
-       }else {
-           echo 'this is for single table';
-       }
-
-        $column = implode(',',array_values($column));
-
-        $sql = "SELECT {$column} FROM {$table} {$query}";
-
-      
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(); 
-
-        return $stmt->fetchAll(); 
-    }
-
-  public function query($sql, $params = array())
-  {
-
-    $this->_errors = false;
-    $x = 1;
-    if($this->_query = $this->pdo->prepare($sql))
-    {               
-        foreach($params as $param)
-        {
-          $this->_query->bindValue($x, $param);
-          $x++;
-        }
-      if($this->_query->execute())
-      {
-        $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
-        $this->_rowcount = $this->_query->rowCount();
-      }
-      else
-      {
-        $this->_errors = true;
-      }
-    }
-    return $this;
-
-  }
-
-  public function action($action,$table,$read_data)
-  {
-
-    if (array_key_exists('join_tablek',$read_data)) {
-
+        if (array_key_exists('join_table',$read_data)) {
+            
             extract($read_data);
 
             $join_table_query = array();
@@ -147,29 +104,64 @@ class Db {
                 ON {$table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
             } 
 
-            $join_table_query  = implode(' ',array_values($join_table_query)); 
-            echo 'one';
+            $query  .= implode(' ',array_values($join_table_query)); 
 
+        }
 
-       }elseif(array_key_exists('condition',$read_data)) {
-
-            echo 'two';
+        if(array_key_exists('condition',$read_data)) {
 
             extract($read_data);
 
             $condition_query = array();
 
             foreach ($condition as $key => $value) {
-                $condition_query[$key] = "WHERE {$condition['condition_field']} {$condition['operator']} {$condition['value']}";
+                $condition_query[$key] = " WHERE {$condition[$key]['condition_field']} 
+                {$condition[$key]['operator']} ? ";
+            }
+
+            if (count($condition) > 1) {
+                $query  .= implode(" {$logical_operator[0]} ",array_values($condition_query));
+            } else {
+                $query  .= implode(' ',array_values($condition_query));
             } 
+        }
 
-            $condition_query  = implode(' ',array_values($condition_query));
-       }
+        return $query;
 
-       echo  $condition_query;
+    }
+  
+  /**
+   * action
+   *
+   * @param  string $action
+   * @param  string $table
+   * @param  array $read_data
+   * @return array result
+   */
+  public function action($action,$table,$read_data)
+  {
 
+    $query = $this->checkQuery($table,$read_data);
+    
+    extract($read_data);
 
-die();
+    $column = implode(',',array_values($column));
+
+    $sql = "{$action} {$column} FROM {$table} {$query}";
+ 
+    $stmt = $this->pdo->prepare($sql);
+
+    $pos = strpos($sql,'WHERE');
+    if ($pos) {
+        $stmt->execute([$condition[0]['value']]); 
+        return $stmt->fetchAll(); 
+    } else {
+        $stmt->execute(); 
+        return $stmt->fetchAll(); 
+    }
+    
+ 
+
         /* if(!is_array($tables))
         {
             if(count($where) === 3)
@@ -276,6 +268,32 @@ die();
   {
     
       return $this->_errors;
+  }
+
+  public function query($sql, $params = array())
+  {
+
+    $this->_errors = false;
+    $x = 1;
+    if($this->_query = $this->pdo->prepare($sql))
+    {               
+        foreach($params as $param)
+        {
+          $this->_query->bindValue($x, $param);
+          $x++;
+        }
+      if($this->_query->execute())
+      {
+        $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
+        $this->_rowcount = $this->_query->rowCount();
+      }
+      else
+      {
+        $this->_errors = true;
+      }
+    }
+    return $this;
+
   }
 
 
