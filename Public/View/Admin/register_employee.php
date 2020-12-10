@@ -44,9 +44,11 @@ extract($fields);
             <a href="#">Edit Employee</a>
             <a href="#">Past Employee</a>
         </div>
-        <a href="#news">News</a>
-        <a href="#contact">Contact</a>
-        <a href="#about">About</a>
+        <a href="#department">Department</a>
+        <a href="#attendance">Attendance</a>
+        <a href="#leave">Leave</a>
+        <a href="#attendance">Report</a>
+        <a href="#leave">User Management</a>
     </div>
 
     <div class ="container"> 
