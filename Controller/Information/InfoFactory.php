@@ -3,12 +3,12 @@ require_once '../../../Controller/Information/Employee.php';
 
 class InfoFactory 
 {
-    function initializeInfo($type,$params)
+    function initializeInfo($type,$post)
     {
         if ($type === 'employee') {
-            return new Employee($params);
+            return new Employee($post);
         } elseif ($type === 'department') {
-            return new Department($params);
+            return new Department($post);
         }
 
         throw new Exception("Unsupported Info");        

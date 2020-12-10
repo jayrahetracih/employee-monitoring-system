@@ -2,7 +2,7 @@
 require_once '../../../Controller/User/Admin.php';
 
 $admin = new Admin();
-$post_result = $admin->addInfo('employee',$_POST);
+$post_result = $admin->tempAddInfo('employee',$_POST);
 
 $fields = array('name' => array(
                     'first_name',
