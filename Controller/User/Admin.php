@@ -9,7 +9,10 @@ class Admin
     {
         $this->info_factory = new InfoFactory();
     }
-
+    
+    function addInfo($type,$post)
+    {
+        $info = $this->info_factory->initializeInfo($type,$post);
         return $info->create();
     }
 
