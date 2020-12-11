@@ -39,7 +39,7 @@ class Department implements InfoInterface {
 
                 )))
                 {
-                    return true;
+                    return array('success_message' => $_POST['dept_name'] . ' Department Added Successfully!');
                 }
             }
             else
