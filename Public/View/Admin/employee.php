@@ -3,7 +3,9 @@ require_once '../../../Controller/User/Admin.php';
 
 $admin = new Admin();
 $result = $admin->tempReadInfo('employee');
-
+/* echo '<pre>';
+             print_r($condition_query);
+echo '</pre>'; */
 ?>
 
 <?php include_once '../../../Public/layouts/header.php'; ?>

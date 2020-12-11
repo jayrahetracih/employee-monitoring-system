@@ -10,34 +10,28 @@ class Admin
         $this->info_factory = new InfoFactory();
     }
 
-    function tempAddInfo($type,$post)
-    {
-        $info = $this->info_factory->initializeInfo($type,$post);
-        return $info->create();
-    }
-
     function tempReadInfo($type)
     {
         $info = $this->info_factory->initializeInfo($type, NULL);
         return $info->read();
     }
 
-    function addInfo($type, $table, $params)
+    function addInfo($type, $params)
     {
        $info = $this->info_factory->initializeInfo($type,$params);
        return $info->create();
     }
 
-    function readInfo($type, $fields, $table, $condition = array())
+    function readInfo($type)
     {
         $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->read($fields, $table, $condition);
+        return $info->read();
     }
 
-    function updateInfo($type, $table, $set_values = array(), $condition = array())
+    function updateInfo($type, $update_id)
     {
         $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->update($table, $set_values, $condition);
+        return $info->update($update_id);
     }
       
 
