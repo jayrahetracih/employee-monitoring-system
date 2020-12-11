@@ -24,7 +24,7 @@
     <thead>
       <tr class="d-flex">
         <th class="col-8">Department Name</th>
-        <th class="col-4"> Archive</th>
+        <th class="col-4"> Action</th>
       </tr>
     </thead>
     <tbody>
@@ -38,28 +38,30 @@
                 
                 <tr class="d-flex" >
                     <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '8' ?>"><?php echo $value['department']; ?></td>
-                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $value['department'] == 'Unassigned' ? 'd-none' : ''; ?>" onclick="
+                    <?php if($value['department'] != 'Unassigned'): ?>
+                    <td class="col-4"><button class="btn btn-warning btn-sm" onclick="
                                                                             $('#deptId').val(<?php echo $value['department_id']; ?>);
                                                                             $('#Modal').val(true);
                                                                             $('#message').append('<?php echo $value['department']; ?> Updated');
                                                                             $('#changeStatusForm').submit();
                                                                             ">
                     Archive</button></td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
                 <tr class="d-flex">
-                    <td class="col-12"><a href="#" onClick="$('#add').toggleClass('d-none');">Add Department</a></td>
+                    <td class="col-12 btn btn-outline-primary" style="cursor:pointer" onClick="$('#add').toggleClass('d-none');">Add Department</td>
                 </tr>
                 <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?>" id="add">
                     <td class="col-12">
-                        <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                        <form class="justify-content-center p-4 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
                         <p class="h4 mb-4 text-center">Add Department</p>
                         <div class="form-group">
                             <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
                             name="dept_name" placeholder="Department Name" autocomplete="off">
                             <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
                         </div>
-                        <button type="submit" class="btn btn-info  btn-block" name="btn_addDepartment" >Submit</button>
+                        <button type="submit" class="btn btn-primary  btn-block" name="btn_addDepartment" >Submit</button>
                         </form><!--Form Add Department -->
                     </td>
                 </tr>
