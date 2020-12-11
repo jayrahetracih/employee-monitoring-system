@@ -2,18 +2,21 @@
 require_once 'InfoInterface.php';
 require_once '../../../Controller/Class/Validator.php';
 require_once '../../../Model/Db.php';
+require_once '../../../Model/Department_model.php';
 /**
  * undocumented class
  */
 class Department implements InfoInterface {
     private $db;
     private $validator;
+    private $model;
 
     public function __construct($post=array())
     {
         $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
+        $this->$model = new Department_model();
     }
 
     public function create()
