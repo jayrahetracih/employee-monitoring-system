@@ -58,7 +58,7 @@ class Db {
              // Insert the metadata of the employee_details into the database
             $stmt_employee_details = $this->pdo->prepare(
             'INSERT INTO `tbl_employee_details`(`first_name`, `middle_name`,
-            `last_name`, `age`,`gender`, `address`, `mobile_number`, `email`)
+            `last_name`, `gender`,`age`, `address`, `mobile_number`, `email`)
             VALUES (?,?,?,?,?,?,?,?)');
 
             $stmt_employee_details->execute(array_values($employee_details));

@@ -2,7 +2,7 @@
 require_once '../../../Controller/User/Admin.php';
 
 $admin = new Admin();
-$post_result = $admin->tempAddInfo('employee',$_POST);
+$post_result = $admin->addInfo('employee',$_POST);
 
 $fields = array('name' => array(
                     'first_name',
@@ -53,8 +53,8 @@ extract($fields);
                              <div class="form-group ">
                                 <select  name="<?php echo $name[$key]; ?>"  class="custom-select form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" >
                                     <option value="">Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="male">male</option>
+                                    <option value="female">female</option>
                                 </select> 
                                 <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
                             </div>

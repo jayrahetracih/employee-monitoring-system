@@ -1,10 +1,10 @@
 <?php
-require_once '../../Controller/Information/Employee.php';
+/* require_once '../../Controller/Information/Employee.php';
 require_once '../../Controller/User/User.php';
 
 $user = new User();
 $user->login();
-
+ */
 ?>
 <?php include_once '../../Public/layouts/header.php'; ?>
 
