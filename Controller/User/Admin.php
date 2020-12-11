@@ -20,6 +20,7 @@ class Admin
     {
         $info = $this->info_factory->initializeInfo($type, NULL);
         return $info->read();
+    }
 /* 
     function addInfo($type, $table, $params)
     {
