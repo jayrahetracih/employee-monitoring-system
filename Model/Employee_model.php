@@ -12,7 +12,6 @@ class Employee_model
     function executeCreate($post = array())
     { 
         return $this->db->insertWithTransaction($post);
-      
     }
 
     function executeRead()
