@@ -4,25 +4,13 @@
  include_once '../../../Controller/User/Admin.php';
  
  $admin = new Admin();
- $post_result = $admin->addInfo('department', 'tbl_department', $_POST);
+ $post_result = $admin->addInfo('department', $_POST);
+ $read_result = $admin->readInfo('department');
  
-
  if(isset($_GET['department_id']))
  {
-     $admin->updateInfo('department', 'tbl_department', 
-     array(
-        'status' => 'Inactive'
-     ), 
-     array(
-        'department_id', '=', $_GET['department_id']
-     ));
+     $admin->updateInfo('department', $_GET['department_id']);
  }
-
-
-
-
-
- 
 
 ?>
 
@@ -40,20 +28,20 @@
       </tr>
     </thead>
     <tbody>
-      <?php if(empty($results)): ?>
+      <?php if(empty($read_result)): ?>
                 <tr class="d-flex">
                     <td class="col-12">No Departments Yet</td>
                 </tr>
             <?php endif; ?>
 
-            <?php foreach($results as $id => $dept): ?>
+            <?php foreach($read_result as $value): ?>
                 
                 <tr class="d-flex" >
-                    <td class="col-<?php echo $dept == 'Unassigned' ? '12' : '8' ?>"><?php echo $dept; ?></td>
-                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
-                                                                            $('#deptId').val(<?php echo $id; ?>);
+                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '8' ?>"><?php echo $value['department']; ?></td>
+                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $value['department'] == 'Unassigned' ? 'd-none' : ''; ?>" onclick="
+                                                                            $('#deptId').val(<?php echo $value['department_id']; ?>);
                                                                             $('#Modal').val(true);
-                                                                            $('#message').append('<?php echo $dept; ?> Updated');
+                                                                            $('#message').append('<?php echo $value['department']; ?> Updated');
                                                                             $('#changeStatusForm').submit();
                                                                             ">
                     Archive</button></td>
@@ -62,7 +50,7 @@
                 <tr class="d-flex">
                     <td class="col-12"><a href="#" onClick="$('#add').toggleClass('d-none');">Add Department</a></td>
                 </tr>
-                <tr class="d-none" id="add">
+                <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?>" id="add">
                     <td class="col-12">
                         <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
                         <p class="h4 mb-4 text-center">Add Department</p>

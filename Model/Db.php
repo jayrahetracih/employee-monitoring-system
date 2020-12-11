@@ -159,9 +159,6 @@ class Db {
         $stmt->execute(); 
         return $stmt->fetchAll(); 
     }
-    
- 
-
         /* if(!is_array($tables))
         {
             if(count($where) === 3)
@@ -218,28 +215,20 @@ class Db {
       return $this->action('DELETE',$in,$table,$where);
   }
 
-  public function update($table, $set_values = array(), $condition = array())
+  public function update($table, $read_data)
   {
-
-    $field_identifier = $condition[0];
-    $operator = $condition[1];
-    $identifier_value = $condition[2];
-
-    $set = '';
-    foreach($set_values as $field => $value)
-    {
-        $set .= $field . " = ?";
-        $child_post[$field] = $value;
-    }
+    extract($read_data);
+    extract($set_clause);
     
-    $sql = "UPDATE `$table` SET $set WHERE $field_identifier $operator $identifier_value";
-    if(!$this->query($sql, $child_post)->error())
+    $set_query = implode(' = ?', $set_fields) . ' = ?';
+    
+    $sql = "UPDATE `$table` SET $set_query WHERE $condition_field $operator $condition_value";
+    
+    if(!$this->query($sql, $set_values)->error())
     {
         return true;
     }
-    
     return false; 
-
   }
 
 

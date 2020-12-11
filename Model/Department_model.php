@@ -4,7 +4,7 @@ class Department_model
 {
     private $db;
 
-    private function __construct()
+    public function __construct()
     {
         $this->db = Db::getInstance();
     }

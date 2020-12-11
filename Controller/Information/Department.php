@@ -9,14 +9,12 @@ require_once '../../../Model/Department_model.php';
 class Department implements InfoInterface {
     private $db;
     private $validator;
-    private $model;
 
     public function __construct($post=array())
     {
         $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
-        $this->$model = new Department_model();
     }
 
     public function create()
@@ -51,14 +49,27 @@ class Department implements InfoInterface {
         }
     }
 
-    public function read($field, $table, $condition = array())
+    public function read()
     {
-        return $this->db->get($table, $field, $condition);
+        $read_data = array('column'=> array('*'),
+                            'condition'=>array(array(
+                                'condition_field' => 'status',
+                                'operator'=> '=',
+                                'value'=>'Active'
+                                )));
+        return $this->db->get('tbl_department', $read_data);
     }
 
-    public function update($table, $set_values = array(), $condition = array())
+    public function update($update_id)
     {
-        if($this->db->update($table, $set_values, $condition))
+        $read_data = array('set_clause'=> array(
+                                'set_fields' => array('status'),
+                                'set_values' => array('Inactive')),
+                            'condition_field' => 'department_id',
+                            'operator'=> '=',
+                            'condition_value'=>$update_id);
+
+        if($this->db->update('tbl_department', $read_data))
         {
             return true;
         }
