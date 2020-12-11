@@ -48,5 +48,26 @@ $user->login();
     
 </section>
 
+   <!-- main container -->
+    <div class="main-container">
+            <!-- container -->
+            <div class="container">
+                <img src="View/resources/img/microsoft.png" alt="Placeholder image">
+                <!-- Employee ID  -->
+                <div class="form-group">
+                    <label for="EmployeeId">Employee ID:</label>
+                    <input type=text class="form-control" name="employeeId"  >
+                </div>
+                <!-- Password -->
+                <div class="form-group"> 
+                    <label for="Password">Password:</label>       
+                    <input type=password class="form-control" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block my-4" name="btn_login" >Login</button>   
+                <a href=#>Forgot your password?</a>   
+            </div><!-- container -->   
+            <div class="img-container"></div>
+    </div><!-- main container -->   
+
 
 <?php include_once '../../Public/layouts/footer.php'; ?>
