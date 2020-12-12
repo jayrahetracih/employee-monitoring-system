@@ -39,7 +39,7 @@ class Department implements InfoInterface {
 
                 )))
                 {
-                    return array('success_message' => $_POST['dept_name'] . ' Department Added Successfully!');
+                    return array('alert_message' => $_POST['dept_name'] . ' Department Added Successfully!');
                 }
             }
             else
@@ -71,7 +71,7 @@ class Department implements InfoInterface {
 
         if($this->db->update('tbl_department', $read_data))
         {
-            return true;
+            return array('alert_message' => 'Department Updated Successfully!');
         }
     }
 

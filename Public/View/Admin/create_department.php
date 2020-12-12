@@ -6,11 +6,8 @@
  $admin = new Admin();
  $post_result = $admin->addInfo('department', $_POST);
  $read_result = $admin->readInfo('department');
+ $update_result = isset($_GET['department_id']) ? $admin->updateInfo('department', $_GET['department_id']) : NULL;
  
- if(isset($_GET['department_id']))
- {
-     $admin->updateInfo('department', $_GET['department_id']);
- }
 
 ?>
 
@@ -23,8 +20,8 @@
     <table class="table table-striped table-bordered">
     <thead>
       <tr class="d-flex">
-        <th class="col-8">Department Name</th>
-        <th class="col-4"> Action</th>
+        <th class="col-10">Department Name</th>
+        <th class="col-2"> Action</th>
       </tr>
     </thead>
     <tbody>
@@ -37,15 +34,26 @@
             <?php foreach($read_result as $value): ?>
                 
                 <tr class="d-flex" >
-                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '8' ?>"><?php echo $value['department']; ?></td>
+                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '10' ?>" id="<?php echo $value['department_id']; ?>"><?php echo $value['department']; ?></td>
                     <?php if($value['department'] != 'Unassigned'): ?>
-                    <td class="col-4"><button class="btn btn-warning btn-sm" onclick="
-                                                                            $('#deptId').val(<?php echo $value['department_id']; ?>);
-                                                                            $('#Modal').val(true);
-                                                                            $('#message').append('<?php echo $value['department']; ?> Updated');
-                                                                            $('#changeStatusForm').submit();
-                                                                            ">
-                    Archive</button></td>
+                    <td class="col-2 btn btn-primary btn-sm dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    
+                    <!-- <div class="btn-group"> -->
+                       <!--  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                        </button> -->
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onClick="$('#<?php echo $value['department_id']; ?>').attr('contenteditable', 'true');$('#<?php echo $value['department_id']; ?>').focus();">Rename</a>
+                            <a class="dropdown-item" href="#" onclick="
+                                                                        $('#deptId').val(<?php echo $value['department_id']; ?>);
+                                                                        $('#Modal').val(true);
+                                                                        $('#message').append('<?php echo $value['department']; ?> Updated');
+                                                                        $('#changeStatusForm').submit();
+                                                                        ">Archive</a>
+                        </div>
+                    <!-- </div> -->
+                    
+                    </td>
                     <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
@@ -87,9 +95,11 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div id="message"class="modal-body bg-success text-white font-weight-bold">
+                <?php echo $post_result['alert_message']?? ''; ?>
+                <?php echo $update_result['alert_message']?? ''; ?>
                 </div>
                 <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.header('create_department.php');">Close</button>
+                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
                 </div>
             </div>
 
@@ -125,6 +135,13 @@ $(document).ready(function(){
         $("#alertModal").modal("show");
     }
 
+    $(".editable").click(function() {
+    var divHtml = $(this).html(); // notice "this" instead of a specific #myDiv
+    var editableText = $("<textarea />");
+    editableText.val(divHtml);
+    $(this).replaceWith(editableText);
+    editableText.focus();
+});
 })
 </script>
 
