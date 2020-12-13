@@ -45,7 +45,6 @@ img[alt$="kubocoders"] {
 } 
 
 .img-container {
-    background-color: red;  
     grid-area: box2;
     background-image: url("../img/building.jpeg");
     background-repeat: no-repeat;
