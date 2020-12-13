@@ -1,13 +1,9 @@
 <?php
- include_once '../../../Controller/Class/Validator.php';
- include_once '../../../Controller/Information/Department.php';
  include_once '../../../Controller/User/Admin.php';
  
  $admin = new Admin();
  $post_result = $admin->addInfo('department', $_POST);
- $read_result = $admin->readInfo('department');
- $update_result = isset($_GET['department_id']) ? $admin->updateInfo('department', $_GET['department_id']) : NULL;
- 
+ $read_result = $admin->readInfo('department'); 
 
 ?>
 
@@ -34,24 +30,15 @@
             <?php foreach($read_result as $value): ?>
                 
                 <tr class="d-flex" >
-                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '10' ?>" id="<?php echo $value['department_id']; ?>"><?php echo $value['department']; ?></td>
+                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '10' ?> edit" id="<?php echo $value['department_id']; ?>"><?php echo $value['department']; ?></td>
                     <?php if($value['department'] != 'Unassigned'): ?>
                     <td class="col-2 btn btn-primary btn-sm dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    
-                    <!-- <div class="btn-group"> -->
-                       <!--  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action
-                        </button> -->
+ 
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" onClick="$('#<?php echo $value['department_id']; ?>').attr('contenteditable', 'true');$('#<?php echo $value['department_id']; ?>').focus();">Rename</a>
-                            <a class="dropdown-item" href="#" onclick="
-                                                                        $('#deptId').val(<?php echo $value['department_id']; ?>);
-                                                                        $('#Modal').val(true);
-                                                                        $('#message').append('<?php echo $value['department']; ?> Updated');
-                                                                        $('#changeStatusForm').submit();
-                                                                        ">Archive</a>
+                            <a class="dropdown-item archive" href="#" id="<?php echo $value['department_id']; ?>">Archive
+                            </a>
                         </div>
-                    <!-- </div> -->
                     
                     </td>
                     <?php endif; ?>
@@ -60,10 +47,10 @@
                 <tr class="d-flex">
                     <td class="col-12 btn btn-outline-primary" style="cursor:pointer" onClick="$('#add').toggleClass('d-none');">Add Department</td>
                 </tr>
-                <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?>" id="add">
+                <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?> bg-white" id="add">
                     <td class="col-12">
                         <form class="justify-content-center p-4 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
-                        <p class="h4 mb-4 text-center">Add Department</p>
+                        <!-- <p class="h4 mb-4 text-center">Add Department</p> -->
                         <div class="form-group">
                             <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
                             name="dept_name" placeholder="Department Name" autocomplete="off">
@@ -75,14 +62,6 @@
                 </tr>
     </tbody>
   </table>
-                <!-- Hidden Form For Change Employee Status -->
-
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
-                <input type="hidden" id="deptId" name="department_id">
-                <input type="hidden" id="Modal" name="Modal">
-                </form>
-
-                <!-- Hidden Form For Change Employee Status -->
                 
     </div><!-- container -->
 
@@ -94,12 +73,12 @@
 
             <!-- Modal content-->
             <div class="modal-content">
-                <div id="message"class="modal-body bg-success text-white font-weight-bold">
+                <div id="message"class="modal-body font-weight-bold">
                 <?php echo $post_result['alert_message']?? ''; ?>
                 <?php echo $update_result['alert_message']?? ''; ?>
                 </div>
-                <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
                 </div>
             </div>
 
@@ -107,43 +86,73 @@
     </div><!--Alert Modal-->
 
 <?php include_once '../../../Public/layouts/footer.php'; ?>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script>
-$(document).ready(function(){
+   $('.edit').on('keydown', function(event) {
+        
+        switch(event.keyCode){
+           case 13:
+            event.preventDefault();
+            var formData = { 
+                'set_fields'        :   'department',
+                'set_values'        :   $(this).text(),
+                'condition_field'   :   'department_id',
+                'operator'          :   '=',
+                'condition_value'   :   $(this).attr('id')
+            };
+            $.ajax({
+                type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                url         : '../../../Controller/Handler/Department_handler.php', // the url where we want to POST
+                data        : formData, // our data object
+                dataType    : 'json', // what type of data do we expect back from the server
+                            encode          : true,
+                success     : function(data){console.log(data);},
+                error       : function(data){console.log(data);}
+            }).done(function(data) {
 
-    var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
+                // log data to the console so we can see
+                console.log(data);
+                var res = (data['success'] === false ? data['errors'] : data['message']);
+                
+                $('#message').text(res);
+                $('#alertModal').modal('show');
 
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                // here we will handle errors and validation messages
+            });
+    
+           break;
         }
-    }
-    };
+     });
 
-    var modal = $.trim(getUrlParameter('Modal')); 
-    console.log(modal);
-    if(modal == "true")
-    {
-        $("#alertModal").modal("show");
-    }
+     $('.archive').on('click', function()
+     {
+        var formData = { 
+                'set_fields'        :   'status',
+                'set_values'        :   'Inactive' ,
+                'condition_field'   :   'department_id',
+                'operator'          :   '=',
+                'condition_value'   :   $(this).attr('id')
+            };
+            console.log(formData);
+        $.ajax({
+                type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                url         : '../../../Controller/Handler/Department_handler.php', // the url where we want to POST
+                data        : formData, // our data object
+                dataType    : 'json', // what type of data do we expect back from the server
+                            encode          : true,
+                success     : function(data){console.log(data);},
+                error       : function(data){console.log(data);}
+            }).done(function(data) {
 
-    $(".editable").click(function() {
-    var divHtml = $(this).html(); // notice "this" instead of a specific #myDiv
-    var editableText = $("<textarea />");
-    editableText.val(divHtml);
-    $(this).replaceWith(editableText);
-    editableText.focus();
-});
-})
+                // log data to the console so we can see
+                console.log(data);
+                var res = (data['success'] === false ? data['errors'] : data['message']);
+                
+                $('#message').text(res);
+                $('#alertModal').modal('show');
+
+                // here we will handle errors and validation messages
+            });
+
+     });
 </script>
-
-
 

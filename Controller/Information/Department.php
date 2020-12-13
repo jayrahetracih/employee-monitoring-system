@@ -1,20 +1,23 @@
 <?php 
 require_once 'InfoInterface.php';
-require_once '../../../Controller/Class/Validator.php';
-require_once '../../../Model/Db.php';
-require_once '../../../Model/Department_model.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Class/Validator.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Db.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Department_model.php';
 /**
  * undocumented class
  */
 class Department implements InfoInterface {
     private $db;
     private $validator;
+    private $dpt_model;
+    private $post;
 
     public function __construct($post=array())
     {
         $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
+        $this->dpt_model = new Department_model();
     }
 
     public function create()
@@ -60,18 +63,22 @@ class Department implements InfoInterface {
         return $this->db->get('tbl_department', $read_data);
     }
 
-    public function update($update_id)
+    public function update($post)
     {
         $read_data = array('set_clause'=> array(
-                                'set_fields' => array('status'),
-                                'set_values' => array('Inactive')),
-                            'condition_field' => 'department_id',
-                            'operator'=> '=',
-                            'condition_value'=>$update_id);
+            'set_fields' => array($post['set_fields']),
+            'set_values' => array($post['set_values']),
+        'condition_field' => $post['condition_field'],
+        'operator'=> $post['operator'],
+        'condition_value'=>$post['condition_value']));
 
         if($this->db->update('tbl_department', $read_data))
         {
-            return array('alert_message' => 'Department Updated Successfully!');
+            return array('alert_message' => ucFirst($post['set_fields']) . ' Updated!');
+        }
+        else
+        {
+            die('error');
         }
     }
 

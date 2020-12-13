@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../Core/Config.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Core/Config.php';
 
 class Db {
 
@@ -159,50 +159,6 @@ class Db {
         $stmt->execute(); 
         return $stmt->fetchAll(); 
     }
-        /* if(!is_array($tables))
-        {
-            if(count($where) === 3)
-            {
-                $conditionField = $where[0];
-                $operator = $where[1];
-                $value = $where[2];
-
-                $sql = "$action $actionField FROM $tables WHERE $conditionField $operator ?";
-                if(!$this->query($sql,array($value))->error())
-                {
-                    return $this;
-                }
-            }
-        }
-        else
-        {
-            extract($tables);
-            foreach($join_table as $key => $value)
-            {
-                $query_array[$key] = "INNER JOIN {$join_table[$key]} 
-                ON {$main_table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
-            }
-
-            $query = implode(' ',array_values($query_array));
-
-            extract($where);
-            extract($clause);
-            $w = $reference_table . '.' . $clause_field . $clause_operator . "'" . $clause_value . "'";
-            $query .= " WHERE {$w}";
-
-            $columns = implode(',',array_values($actionField));
-
-            $sql = "SELECT {$columns} FROM {$main_table} {$query}";
-            
-            die($sql);
-            $stmt = $this->pdo->prepare($sql);
-            if($stmt->execute())
-            {
-            return $stmt->fetchAll(); 
-            }
-
-        }
-        return false; */
   }
 
   public function get($table,$read_data)
@@ -222,7 +178,7 @@ class Db {
     
     $set_query = implode(' = ?', $set_fields) . ' = ?';
     
-    $sql = "UPDATE `$table` SET $set_query WHERE $condition_field $operator $condition_value";
+    $sql = "UPDATE `$table` SET $set_query WHERE $condition_field $operator '$condition_value'";
     
     if(!$this->query($sql, $set_values)->error())
     {

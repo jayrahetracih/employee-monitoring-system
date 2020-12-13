@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../Controller/Information/InfoFactory.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Information/InfoFactory.php';
 
 class Admin
 {
@@ -34,10 +34,10 @@ class Admin
         return $info->read($fields, $table, $condition);
     } */
 
-    function updateInfo($type, $update_id)
+    function updateInfo($type, $post)
     {
-        $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->update($update_id);
+        $info = $this->info_factory->initializeInfo($type, $post);
+        return $info->update($post);
     }
       
 

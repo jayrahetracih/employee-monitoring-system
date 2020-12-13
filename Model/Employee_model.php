@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../Model/Db.php';
+require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Db.php';
 
 class Employee_model 
 {

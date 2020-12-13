@@ -13,3 +13,15 @@ for (i = 0; i < dropdown.length; i++) {
         }
   });
 }
+
+//create_department.php
+$(document).ready(function(){
+
+    if($.trim($("#message").html()) != '')
+    {
+        $("#alertModal").modal("show");
+    }
+    
+    });
+    
+ 
