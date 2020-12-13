@@ -5,7 +5,11 @@ html, body{
 }
 
 a {
-    color: white;
+    color: black;
+}
+
+a:hover {
+    color: rgb(92, 90, 90);
 }
 
 img {
@@ -18,7 +22,7 @@ img {
 }
 
 .main-container{
-    background-color: #370E79;
+    background-color: #EBEF2E;
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -26,17 +30,44 @@ img {
 }
 
 .container {
-    width: 60%;
-    color: white;
     grid-area: box1;
 }
 
+.row {
+    margin-top: 150px;
+    margin-left: 150px;
+    width: 100%;
+    
+}
+
+img[alt$="kubocoders"] {
+    margin-bottom: 50px;
+} 
+
 .img-container {
-    /* for debugging */
     background-color: red;  
     grid-area: box2;
     background-image: url("../img/building.jpeg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-}
+} 
+
+@media screen and (max-width: 768px) {
+    .form {
+      width: 100%;
+      height: auto;
+      position: relative;
+      
+    }
+    body{
+        background-color: black;
+    }
+  }
+  
+  /* @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  } */
