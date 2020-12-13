@@ -1,6 +1,6 @@
 <?php
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Information/Employee.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Information/Department.php';
+require_once __DIR__.'../../../Controller/Information/Employee.php';
+require_once __DIR__.'../../../Controller/Information/Department.php';
 
 class InfoFactory 
 {

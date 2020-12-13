@@ -1,6 +1,6 @@
 <?php
 
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/User/Admin.php';
+require_once __DIR__.'../../../Controller/User/Admin.php';
 
 
 $admin = new Admin();

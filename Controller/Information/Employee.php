@@ -1,7 +1,7 @@
 <?php 
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Information/InfoInterface.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Class/Validator.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Employee_model.php';
+require_once __DIR__.'../../../Controller/Information/InfoInterface.php';
+require_once __DIR__.'../../../Controller/Class/Validator.php';
+require_once __DIR__.'../../../Model/Employee_model.php';
 
 
 class Employee implements InfoInterface{

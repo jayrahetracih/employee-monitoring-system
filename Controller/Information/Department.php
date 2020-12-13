@@ -1,8 +1,8 @@
 <?php 
-require_once 'InfoInterface.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Controller/Class/Validator.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Db.php';
-require_once 'D:/xampp/htdocs/employee-monitoring-system/Model/Department_model.php';
+require_once __DIR__.'../InfoInterface.php';
+require_once __DIR__.'../../../Controller/Class/Validator.php';
+require_once __DIR__.'../../../Model/Db.php';
+require_once __DIR__.'../../../Model/Department_model.php';
 /**
  * undocumented class
  */
