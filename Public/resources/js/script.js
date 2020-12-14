@@ -20,6 +20,7 @@ $(document).ready(function(){
     if($.trim($("#message").html()) != '')
     {
         $("#alertModal").modal("show");
+        $('#modalClose').focus();
     }
     
 
@@ -52,6 +53,7 @@ $(document).ready(function(){
                 
                 $('#message').text(res);
                 $('#alertModal').modal('show');
+                $('#modalClose').focus();
 
                 // here we will handle errors and validation messages
             });
@@ -86,6 +88,7 @@ $(document).ready(function(){
                 
                 $('#message').text(res);
                 $('#alertModal').modal('show');
+                $('#modalClose').focus();
 
                 // here we will handle errors and validation messages
             });

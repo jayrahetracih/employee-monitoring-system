@@ -78,7 +78,7 @@
                 <?php echo $update_result['alert_message']?? ''; ?>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
+                <button type="button" id="modalClose" class="btn btn-default" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
                 </div>
             </div>
 
@@ -86,9 +86,4 @@
     </div><!--Alert Modal-->
 
 <?php include_once '../../../Public/layouts/footer.php'; ?>
-<script>
-   
-
-     
-</script>
 
