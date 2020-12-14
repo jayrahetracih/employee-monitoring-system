@@ -2,14 +2,13 @@
 require_once '../../../Controller/User/Admin.php';
 
 $admin = new Admin();
-$result = $admin->tempReadInfo('employee');
+$result = $admin->readInfo('employee');
 
 ?>
 
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
     <div class ="container-fluid"> 
-
               <!-- Table -->
                 <table class="table table-hover mt-4">
                   <thead>

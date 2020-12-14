@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+    RewriteEngine On
+    RewriteRule ^$ Public/View/
+    RewriteRule ^(.+)$ Public/View/
+</IfModule>
