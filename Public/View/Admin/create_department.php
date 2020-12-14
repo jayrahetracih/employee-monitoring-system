@@ -1,39 +1,9 @@
 <?php
- include_once '../../../Controller/Class/Validator.php';
- include_once '../../../Controller/Information/Department.php';
  include_once '../../../Controller/User/Admin.php';
  
  $admin = new Admin();
- $post_result = $admin->addInfo('department', 'tbl_department', $_POST);
- $dept_obj = $admin->readInfo('department', 'department_id, department', 'tbl_department', array('status','=','Active'));
-
- if(isset($_GET['department_id']))
- {
-     $admin->updateInfo('department', 'tbl_department', 
-     array(
-        'status' => 'Inactive'
-     ), 
-     array(
-        'department_id', '=', $_GET['department_id']
-     ));
- }
-
-
-
- $results = array();
- //Extract array data from array object $dept_obj and store to respective columns
- $array_dept    = array_column($dept_obj, 'department');
- $array_id      = array_column($dept_obj, 'department_id');
-
- $x=0;
- //Merge those two arrays
- foreach($array_id as $id)
- {
-     $results[$id] = $array_dept[$x];
-     $x++;
- }
-
- 
+ $post_result = $admin->addInfo('department', $_POST);
+ $read_result = $admin->readInfo('department'); 
 
 ?>
 
@@ -46,56 +16,52 @@
     <table class="table table-striped table-bordered">
     <thead>
       <tr class="d-flex">
-        <th class="col-8">Department Name</th>
-        <th class="col-4"> Archive</th>
+        <th class="col-10">Department Name</th>
+        <th class="col-2"> Action</th>
       </tr>
     </thead>
     <tbody>
-      <?php if(empty($results)): ?>
+      <?php if(empty($read_result)): ?>
                 <tr class="d-flex">
                     <td class="col-12">No Departments Yet</td>
                 </tr>
             <?php endif; ?>
 
-            <?php foreach($results as $id => $dept): ?>
+            <?php foreach($read_result as $value): ?>
                 
                 <tr class="d-flex" >
-                    <td class="col-<?php echo $dept == 'Unassigned' ? '12' : '8' ?>"><?php echo $dept; ?></td>
-                    <td class="col-4"><button class="btn btn-warning btn-sm <?php echo $dept == 'Unassigned' ? 'd-none' : '' ?>" onclick="
-                                                                            $('#deptId').val(<?php echo $id; ?>);
-                                                                            $('#Modal').val(true);
-                                                                            $('#message').append('<?php echo $dept; ?> Updated');
-                                                                            $('#changeStatusForm').submit();
-                                                                            ">
-                    Archive</button></td>
+                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '10' ?> edit" id="<?php echo $value['department_id']; ?>"><?php echo $value['department']; ?></td>
+                    <?php if($value['department'] != 'Unassigned'): ?>
+                    <td class="col-2 btn btn-primary btn-sm dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+ 
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onClick="$('#<?php echo $value['department_id']; ?>').attr('contenteditable', 'true');$('#<?php echo $value['department_id']; ?>').focus();">Rename</a>
+                            <a class="dropdown-item archive" href="#" id="<?php echo $value['department_id']; ?>">Archive
+                            </a>
+                        </div>
+                    
+                    </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
                 <tr class="d-flex">
-                    <td class="col-12"><a href="#" onClick="$('#add').toggleClass('d-none');">Add Department</a></td>
+                    <td class="col-12 btn btn-outline-primary" style="cursor:pointer" onClick="$('#add').toggleClass('d-none');">Add Department</td>
                 </tr>
-                <tr class="d-none" id="add">
+                <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?> bg-white" id="add">
                     <td class="col-12">
-                        <form class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
-                        <p class="h4 mb-4 text-center">Add Department</p>
+                        <form class="justify-content-center p-4 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                        <!-- <p class="h4 mb-4 text-center">Add Department</p> -->
                         <div class="form-group">
                             <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
                             name="dept_name" placeholder="Department Name" autocomplete="off">
                             <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
                         </div>
-                        <button type="submit" class="btn btn-info  btn-block" name="btn_addDepartment" >Submit</button>
+                        <button type="submit" class="btn btn-primary  btn-block" name="btn_addDepartment" >Submit</button>
                         </form><!--Form Add Department -->
                     </td>
                 </tr>
     </tbody>
   </table>
-                <!-- Hidden Form For Change Employee Status -->
-
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" id="changeStatusForm" method="GET">
-                <input type="hidden" id="deptId" name="department_id">
-                <input type="hidden" id="Modal" name="Modal">
-                </form>
-
-                <!-- Hidden Form For Change Employee Status -->
                 
     </div><!-- container -->
 
@@ -107,10 +73,12 @@
 
             <!-- Modal content-->
             <div class="modal-content">
-                <div id="message"class="modal-body bg-success text-white font-weight-bold">
+                <div id="message"class="modal-body font-weight-bold">
+                <?php echo $post_result['alert_message']?? ''; ?>
+                <?php echo $update_result['alert_message']?? ''; ?>
                 </div>
-                <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.header('create_department.php');">Close</button>
+                <div class="modal-footer">
+                <button type="button" id="modalClose" class="btn btn-default" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
                 </div>
             </div>
 
@@ -118,33 +86,4 @@
     </div><!--Alert Modal-->
 
 <?php include_once '../../../Public/layouts/footer.php'; ?>
-<script>
-$(document).ready(function(){
-
-    var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-        }
-    }
-    };
-
-    var modal = $.trim(getUrlParameter('Modal')); 
-    console.log(modal);
-    if(modal == "true")
-    {
-        $("#alertModal").modal("show");
-    }
-
-})
-</script>
-
-
 
