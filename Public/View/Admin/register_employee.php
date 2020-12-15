@@ -41,8 +41,7 @@ extract($fields);
         </button>
         <div class="employee-dropdown-container">
             <a href="#">Register Employee</a>
-            <a href="#">Edit Employee</a>
-            <a href="#">Past Employee</a>
+            <a href="#">Past Employees</a>
         </div>
         <a href="#department">Department</a>
         <a href="#attendance">Attendance</a>
