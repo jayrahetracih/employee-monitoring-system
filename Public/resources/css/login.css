@@ -6,11 +6,19 @@ html, body{
 
 a {
     color: black;
+<<<<<<< HEAD
+}
+
+a:hover {
+    color: rgb(92, 90, 90);
+=======
+>>>>>>> 8f71b27d22512cc6f7c61679f3d813f44ce58057
 }
 
 a:hover {
     color: rgb(92, 90, 90);
 }
+
 
 img {
     width: 100%;
@@ -52,7 +60,11 @@ img[alt$="kubocoders"] {
     background-size: cover;
 } 
 
+<<<<<<< HEAD
 @media screen and (max-width: 768px) {
+=======
+@media screen and (max-width: 360px) {
+>>>>>>> 8f71b27d22512cc6f7c61679f3d813f44ce58057
     .form {
       width: 100%;
       height: auto;
