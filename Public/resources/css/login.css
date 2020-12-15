@@ -2,6 +2,7 @@
 html, body{
     padding: 0;
     margin: 0;
+    background-color: green;
 }
 
 a {
@@ -10,10 +11,6 @@ a {
 
 a:hover {
     color: rgb(92, 90, 90);
-}
-
-.lolo a {
-  color: yellow;
 }
 
 

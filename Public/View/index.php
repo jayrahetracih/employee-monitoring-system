@@ -1,14 +1,16 @@
 <?php
-require_once '../../Controller/Information/Employee.php';
+/* require_once '../../Controller/Information/Employee.php';
 require_once '../../Controller/User/User.php';
 
-$user = new User();
+$user = new User(); */
 //$user->login();
 ?>
 <?php include_once '../../Public/layouts/header.php'; ?>
 
 <div class="main-container">
 <div class ="container"> 
+
+<div class = "lolo"><a href="">lolo</a></div>
         <!-- row -->
         <div class="row ">
           <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4">
