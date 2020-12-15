@@ -35,7 +35,8 @@ $user = new User(); */
               <input type="password" class="form-control <?php  echo (!empty($user_validation['tb_password'])) ? 'is-invalid' : ''; ?>" 
               name="tb_password" placeholder="Password" >
               <span class="invalid-feedback" ><?php echo $user_validation['tb_password'] ?? '' ?></span>
-            </div>            <!-- Sign in button -->
+            </div>
+            <!-- Sign in button -->
             <button type="submit" class="btn btn-primary btn-block my-4" name="btn_login">Submit</button>
             <a href="#">Forgot your password?</a>
             </form>
