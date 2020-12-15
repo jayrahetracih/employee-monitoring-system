@@ -1,43 +1,68 @@
 <?php
- include_once '../../../Controller/Class/Validator.php';
- include_once '../../../Controller/Information/Department.php';
+ include_once '../../../Controller/User/Admin.php';
  
-
- $dept = new Department();
-
- $dept_obj = $dept->read('department', 'department', array('department_status','=','Active'));
+ $admin = new Admin();
+ $post_result = $admin->addInfo('department', $_POST);
+ $read_result = $admin->readInfo('department'); 
 
 ?>
 
-
-<link href="css/simple-sidebar.css" rel="stylesheet">
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
 <section id="cover">
    
     <div class ="container"> 
 
-        <!-- row -->
-        <div class="row">
-
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4 border border-secondary">
-            
-            <p class="h4 mb-4 text-center border-bottom">Active Departments</p>
-            
-            <?php if(empty($dept_obj)): ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1">No Departments Yet</div>
+    <table class="table table-striped table-bordered">
+    <thead>
+      <tr class="d-flex">
+        <th class="col-10">Department Name</th>
+        <th class="col-2"> Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if(empty($read_result)): ?>
+                <tr class="d-flex">
+                    <td class="col-12">No Departments Yet</td>
+                </tr>
             <?php endif; ?>
 
-            <?php foreach($dept_obj as $obj => $value): ?>
+            <?php foreach($read_result as $value): ?>
                 
-                <div class="row border-bottom border-secondary justify-content-center p-1"><?php echo $value; ?></div>
-
+                <tr class="d-flex" >
+                    <td class="col-<?php echo $value['department'] == 'Unassigned' ? '12' : '10' ?> edit" id="<?php echo $value['department_id']; ?>"><?php echo $value['department']; ?></td>
+                    <?php if($value['department'] != 'Unassigned'): ?>
+                    <td class="col-2 btn btn-primary btn-sm dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+ 
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onClick="$('#<?php echo $value['department_id']; ?>').attr('contenteditable', 'true');$('#<?php echo $value['department_id']; ?>').focus();">Rename</a>
+                            <a class="dropdown-item archive" href="#" id="<?php echo $value['department_id']; ?>">Archive
+                            </a>
+                        </div>
+                    
+                    </td>
+                    <?php endif; ?>
+                </tr>
             <?php endforeach; ?>
-                <div class="row border-bottom border-secondary justify-content-center p-1"><a href="#" onClick="$('#addDepartmentModal').modal('show');">Add Department</a></div>
-            </div>
-         
-        </div> <!-- row -->
-
+                <tr class="d-flex">
+                    <td class="col-12 btn btn-outline-primary" style="cursor:pointer" onClick="$('#add').toggleClass('d-none');">Add Department</td>
+                </tr>
+                <tr class="<?php echo (empty( $post_result['dept_name'])) ? 'd-none' : '' ; ?> bg-white" id="add">
+                    <td class="col-12">
+                        <form class="justify-content-center p-4 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
+                        <!-- <p class="h4 mb-4 text-center">Add Department</p> -->
+                        <div class="form-group">
+                            <input type="text" class="form-control <?php echo (!empty( $post_result['dept_name'])) ? 'is-invalid' : '' ; ?>" 
+                            name="dept_name" placeholder="Department Name" autocomplete="off">
+                            <span class="invalid-feedback" ><?php echo $post_result['dept_name'] ?? '' ?></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary  btn-block" name="btn_addDepartment" >Submit</button>
+                        </form><!--Form Add Department -->
+                    </td>
+                </tr>
+    </tbody>
+  </table>
+                
     </div><!-- container -->
 
 
@@ -48,66 +73,17 @@
 
             <!-- Modal content-->
             <div class="modal-content">
-                <div id="message"class="modal-body bg-success text-white font-weight-bold">
+                <div id="message"class="modal-body font-weight-bold">
+                <?php echo $post_result['alert_message']?? ''; ?>
+                <?php echo $update_result['alert_message']?? ''; ?>
                 </div>
-                <div class="modal-footer bg-success">
-                <button type="button" class="btn btn-default text-white" data-dismiss="modal" onclick="location.reload()">Close</button>
+                <div class="modal-footer">
+                <button type="button" id="modalClose" class="btn btn-default" data-dismiss="modal" onclick="document.location.href = 'create_department.php';">Close</button>
                 </div>
             </div>
 
         </div>
     </div><!--Alert Modal-->
 
-    <div class="modal fade" id="addDepartmentModal" role="dialog"><!--Add Department Modal-->
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <!-- Form Add Department -->
-                    <form id="frm" class="justify-content-center border border-secondary p-5 mt-5 form-color" action="<?php echo $_SERVER['PHP_SELF'] ?>" method ="POST">
-                        <p class="h4 mb-4 text-center">Add Department</p>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="dept_name" placeholder="Department Name" autocomplete="off">
-                            <span class="invalid-feedback" ></span>
-                        </div>
-                        <input type="submit" class="btn btn-info  btn-block" name="btn_add" value="Submit" onClick="$('#addDepartmentModal').modal('hide');">
-                    </form><!--Form Add Department -->
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div><!--Add Department Modal-->
-
-
-
 <?php include_once '../../../Public/layouts/footer.php'; ?>
-<script>
-$(document).ready(function() {
-
-// process the form
-$('form').submit(function(event) {
-    event.preventDefault();
-    // process the form
-    $.ajax({
-        type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-        url         : 'Process_Department.php', // the url where we want to POST
-        dataType    : 'json', // define data type
-        data        : $("#frm").serialize(), // our data object
-        success     : function(data) //execute this function if success
-        {
-            console.log(data);
-            $("#message").html(data.message);
-            $("#alertModal").modal("show");
-        }
-    });
-
-});
-
-});
-</script>
-
 
