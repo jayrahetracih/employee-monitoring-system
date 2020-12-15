@@ -1,7 +1,7 @@
 <?php 
-require_once '../../../Controller/Information/InfoInterface.php';
-require_once '../../../Controller/Class/Validator.php';
-require_once '../../../Model/Employee_model.php';
+require_once __DIR__.'../../../Controller/Information/InfoInterface.php';
+require_once __DIR__.'../../../Controller/Class/Validator.php';
+require_once __DIR__.'../../../Model/Employee_model.php';
 
 
 class Employee implements InfoInterface{
@@ -90,10 +90,11 @@ class Employee implements InfoInterface{
     }
 
     public function read(){
-        echo 'read employee info';
+
+        return $this->employee_model->executeRead();
     }
 
-    public function update(){
+    public function update($post/* $table, $set_values = array(), $condition = array() */){
         echo 'update employee info';
     }
 
