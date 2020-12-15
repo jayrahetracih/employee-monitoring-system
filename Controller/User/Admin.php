@@ -1,5 +1,5 @@
 <?php 
-require_once '../../../Controller/Information/InfoFactory.php';
+require_once __DIR__.'../../../Controller/Information/InfoFactory.php';
 
 class Admin
 {
@@ -9,7 +9,7 @@ class Admin
     {
         $this->info_factory = new InfoFactory();
     }
-
+    
     function addInfo($type,$post)
     {
         $info = $this->info_factory->initializeInfo($type,$post);
@@ -34,10 +34,10 @@ class Admin
         return $info->read($fields, $table, $condition);
     } */
 
-    function updateInfo($type, $table, $set_values = array(), $condition = array())
+    function updateInfo($type, $post)
     {
-        $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->update($table, $set_values, $condition);
+        $info = $this->info_factory->initializeInfo($type, $post);
+        return $info->update($post);
     }
       
 

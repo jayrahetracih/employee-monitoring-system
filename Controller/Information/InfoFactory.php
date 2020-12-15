@@ -1,5 +1,6 @@
 <?php
-require_once '../../../Controller/Information/Employee.php';
+require_once __DIR__.'../../../Controller/Information/Employee.php';
+require_once __DIR__.'../../../Controller/Information/Department.php';
 
 class InfoFactory 
 {

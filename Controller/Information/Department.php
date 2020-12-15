@@ -1,19 +1,23 @@
 <?php 
-require_once 'InfoInterface.php';
-require_once '../../../Controller/Class/Validator.php';
-require_once '../../../Model/Db.php';
+require_once __DIR__.'../InfoInterface.php';
+require_once __DIR__.'../../../Controller/Class/Validator.php';
+require_once __DIR__.'../../../Model/Db.php';
+require_once __DIR__.'../../../Model/Department_model.php';
 /**
  * undocumented class
  */
 class Department implements InfoInterface {
     private $db;
     private $validator;
+    private $dpt_model;
+    private $post;
 
     public function __construct($post=array())
     {
         $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
+        $this->dpt_model = new Department_model();
     }
 
     public function create()
@@ -38,7 +42,7 @@ class Department implements InfoInterface {
 
                 )))
                 {
-                    return true;
+                    return array('alert_message' => $_POST['dept_name'] . ' Department Added Successfully!');
                 }
             }
             else
@@ -48,16 +52,33 @@ class Department implements InfoInterface {
         }
     }
 
-    public function read($field, $table, $condition = array())
+    public function read()
     {
-        return $this->db->get($table, $field, $condition);
+        $read_data = array('column'=> array('*'),
+                            'condition'=>array(array(
+                                'condition_field' => 'status',
+                                'operator'=> '=',
+                                'value'=>'Active'
+                                )));
+        return $this->db->get('tbl_department', $read_data);
     }
 
-    public function update($table, $set_values = array(), $condition = array())
+    public function update($post)
     {
-        if($this->db->update($table, $set_values, $condition))
+        $read_data = array('set_clause'=> array(
+            'set_fields' => array($post['set_fields']),
+            'set_values' => array($post['set_values']),
+        'condition_field' => $post['condition_field'],
+        'operator'=> $post['operator'],
+        'condition_value'=>$post['condition_value']));
+
+        if($this->db->update('tbl_department', $read_data))
         {
-            return true;
+            return array('alert_message' => ucFirst($post['set_fields']) . ' Updated!');
+        }
+        else
+        {
+            die('error');
         }
     }
 
