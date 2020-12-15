@@ -1,13 +1,16 @@
 <?php
-require_once '../../Controller/Information/Employee.php';
+/* require_once '../../Controller/Information/Employee.php';
 require_once '../../Controller/User/User.php';
 
-$user = new User();
+$user = new User(); */
 //$user->login();
 ?>
 <?php include_once '../../Public/layouts/header.php'; ?>
 
+<div class="main-container">
 <div class ="container"> 
+
+<div class = "lolo"><a href="">lolo</a></div>
         <!-- row -->
         <div class="row ">
           <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form p-4">
@@ -18,7 +21,8 @@ $user = new User();
             
                 <?php  //echo $user_validation_alert ?? '' ?>
                 <?php // echo $user_validation['query_result'] ?? '' ?>
-            
+                <img src="../../Public/resources/img/kubocoders.jpg" alt="kubocoders">
+
             <!-- Email -->
             <div class="form-group ">
               <input type="text" class="form-control <?php  echo (!empty($user_validation['tb_id_number'])) ? 'is-invalid' : ''; ?>" 
@@ -35,14 +39,15 @@ $user = new User();
             </div>
             <!-- Sign in button -->
             <button type="submit" class="btn btn-info btn-block my-4" name="btn_login">Submit</button>
-
+            <a href="#">Forgot your password?</a>
             </form>
             <!-- form login -->
           </div>
           <!-- row -->
         </div>
     </div><!-- container -->
-    
+    <div class="img-container"></div>
+</div>
 </section>
 
 

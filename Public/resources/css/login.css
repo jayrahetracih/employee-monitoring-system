@@ -2,6 +2,7 @@
 html, body{
     padding: 0;
     margin: 0;
+    background-color: green;
 }
 
 a {
@@ -11,6 +12,7 @@ a {
 a:hover {
     color: rgb(92, 90, 90);
 }
+
 
 img {
     width: 100%;
@@ -46,7 +48,7 @@ img[alt$="kubocoders"] {
 
 .img-container {
     grid-area: box2;
-    background-image: url("../img/building.jpeg");
+    background-image: url("../../img/building.jpeg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
