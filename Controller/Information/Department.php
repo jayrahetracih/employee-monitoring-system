@@ -22,33 +22,30 @@ class Department implements InfoInterface {
 
     public function create()
     {
-        if(isset($_POST['btn_addDepartment']))
+        $validation = $this->validator->checkInput($this->post , array(
+            'dept_name' => array(
+                'name' => 'Department Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            )
+            ));
+
+        if($validation->passed())
         {
-            $validation = $this->validator->checkInput($this->post , array(
-                'dept_name' => array(
-                    'name' => 'Department Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                )
-                ));
+            if($this->db->insert('tbl_department', array(
 
-            if($validation->passed())
+                'department' => $_POST['dept_name'],
+                'status' => 'Active'
+
+            )))
             {
-                if($this->db->insert('tbl_department', array(
-
-                    'department' => $_POST['dept_name'],
-                    'status' => 'Active'
-
-                )))
-                {
-                    return array('alert_message' => $_POST['dept_name'] . ' Department Added Successfully!');
-                }
+                return array('alert_message' => $_POST['dept_name'] . ' Department Added Successfully!');
             }
-            else
-            {
-                return $validation->errors();
-            }
+        }
+        else
+        {
+            return $validation->errors();
         }
     }
 

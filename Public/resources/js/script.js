@@ -1,4 +1,4 @@
-/* var dropdown = document.getElementsByClassName("emp-btn");
+var dropdown = document.getElementsByClassName("emp-btn");
 var i;
 
 for (i = 0; i < dropdown.length; i++) {
@@ -12,12 +12,44 @@ for (i = 0; i < dropdown.length; i++) {
             dropdownContent.style.display = "block";
         }
   });
-} */
+}
+
+// department.php ====================================
 
 $(document).ready(function(){
     let params = {status : 'Active'};
     getData(params);
 });
+
+$('#add_department').on('submit', function(event)
+{
+    event.preventDefault();
+    const form_values = new FormData(this);
+    fetch('../../../Controller/Handler/Department/create.php', {
+        method  : 'POST',
+        body    : form_values
+        })
+        .then((res) => res.json())
+        .then((data) => {
+
+            console.log(data.alert_message);
+            if(data.alert_message != null)
+            {
+                let params = {status : 'Active'};
+                getData(params);
+                $('#message').text(data.alert_message);
+                $('#alertModal').modal('show');
+                $('#modalClose').focus();
+            }
+            else
+            {
+                $('#dept_name').text(data.dept_name);
+                console.log('type in the error');
+            }
+
+        }).catch((e) => console.log(e));
+});
+
 function getData(params)
 {
     fetch('../../../Controller/Handler/Department/read.php', {
@@ -37,7 +69,6 @@ function getData(params)
 
 function updateData(params)
 {
-    console.log(params);
     fetch('../../../Controller/Handler/Department/update.php', {
         method : 'POST',
         headers: {
@@ -97,6 +128,17 @@ function alterTable(data)
                         updateData(data);
                         break;
                     }
+            });
+
+            el.addEventListener('focusout', function(event)
+            {
+                event.preventDefault();
+                let data = {
+                    field   :   'department',
+                    value   :   $.trim(this.innerHTML),
+                    id      :   this.id
+                };
+                updateData(data);
             });
     });
 }
