@@ -10,7 +10,8 @@
 <?php include_once '../../../Public/layouts/header.php'; ?>
 
 <section id="cover">
-   
+    <!--CSS Sidebar Added by Glenn -->
+    <?php include_once '../../../Public/layouts/sidebar.php'; ?>
     <div class ="container"> 
 
     <table class="table table-striped table-bordered">
