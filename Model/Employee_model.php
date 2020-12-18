@@ -23,6 +23,6 @@ class Employee_model
                             'condition'=>array(array('condition_field' => 'tbl_employees.status','operator'=> '=','value'=>'Active'))
                         );
 
-        return $this->db->get('tbl_employees',$read_data);
+        return $this->db->select('tbl_employees',$read_data);
     }
 }

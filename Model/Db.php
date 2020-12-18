@@ -81,7 +81,6 @@ class Db {
             throw $e;
         }
     }
-    
     /**
      * Check data if it has join_table,condition and logical operator
      *
@@ -129,42 +128,98 @@ class Db {
         return $query;
 
     }
-  
-  /**
-   * action
-   *
-   * @param  string $action
-   * @param  string $table
-   * @param  array $read_data
-   * @return array result
-   */
-  public function action($action,$table,$read_data)
-  {
+    /**
+     * action
+     *
+     * @param  string $action
+     * @param  string $table
+     * @param  array $read_data
+     * @return array result
+     */
+    public function select($table,$read_data)
+    {
+        $query = $this->checkQuery($table,$read_data);
+        
+        extract($read_data);
 
-    $query = $this->checkQuery($table,$read_data);
+        $column = implode(',',array_values($column));
+
+        $sql = "SELECT {$column} FROM {$table} {$query}";
     
-    extract($read_data);
+        $stmt = $this->pdo->prepare($sql);
 
-    $column = implode(',',array_values($column));
-
-    $sql = "{$action} {$column} FROM {$table} {$query}";
- 
-    $stmt = $this->pdo->prepare($sql);
-
-    $pos = strpos($sql,'WHERE');
-    if ($pos) {
-        $stmt->execute([$condition[0]['value']]); 
-        return $stmt->fetchAll(); 
-    } else {
-        $stmt->execute(); 
-        return $stmt->fetchAll(); 
+        $has_condition = strpos($sql,'WHERE');
+        if ($has_condition) {
+            $stmt->execute([$condition[0]['value']]); 
+            return $stmt->fetchAll(); 
+        } else {
+            $stmt->execute(); 
+            return $stmt->fetchAll(); 
+        }
     }
-  }
+        
+    /**
+     * userLogin
+     *
+     * @param  array $data
+     * @return void
+     */
+    public function userLogin($data = array()){
 
-  public function get($table,$read_data)
-  {
-    return $this->action('SELECT',$table,$read_data);
-  }
+        $stmt = $this->pdo->prepare("SELECT * FROM tbl_employees WHERE emp_id_number = ?");
+        $stmt->execute([$data['tb_id_number']]);
+        $has_user = $stmt->fetch();
+
+        if ($has_user) {
+
+            if ($has_user['role_id'] == 1) {
+
+                        if (!password_verify($data['tb_password'], $has_user['password'])) {
+                    
+                            return  '<div class="alert alert-danger alert-dismissible fade show" role="alert ">
+                                        Your Password is incorrect.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>'; 
+
+                        }else{
+
+                            header('Location:Admin/employee.php');
+                            exit();
+        
+                        }
+
+            } else {
+
+                if (!password_verify($data['tb_password'], $has_user['password'])) {
+                    
+                    return  '<div class="alert alert-danger alert-dismissible fade show" role="alert ">
+                                Your Password is incorrect.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>'; 
+
+                }else{
+
+                   echo "NOT YET FINISHED!!!!";
+ 
+                }
+
+            }
+            
+        } else {
+
+             return  '<div class="alert alert-danger alert-dismissible fade show" role="alert ">
+                               Your ID Number or Password is incorrect.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>'; 
+        }
+
+    }
 
   public function delete($table, $where)
   {
