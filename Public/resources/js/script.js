@@ -32,19 +32,22 @@ $('#add_department').on('submit', function(event)
         .then((res) => res.json())
         .then((data) => {
 
-            console.log(data.alert_message);
-            if(data.alert_message != null)
+            console.log(data);
+            if(data.result == 'success')
             {
                 let params = {status : 'Active'};
                 getData(params);
-                $('#message').text(data.alert_message);
+                $('#message').text(data.message);
+                $('#department_form').modal('hide');
+                $("input:text"). val("") 
                 $('#alertModal').modal('show');
                 $('#modalClose').focus();
-            }
-            else
+
+            }else
             {
-                $('#dept_name').text(data.dept_name);
-                console.log('type in the error');
+                //this works for now on a single form group ========== For Revision
+                $('#dept_name').find('span').text(data.message);
+                $('#dept_name').find('input').addClass('is-invalid');
             }
 
         }).catch((e) => console.log(e));
@@ -143,4 +146,11 @@ function alterTable(data)
     });
 }
 
-
+/* function initializeErrors(e)
+{
+    e.forEach(errs)
+    {
+        $('#' + errs).find('span').text(data.dept_name);
+        $('#dept_name').find('input').addClass('is-invalid');
+    }   
+} */

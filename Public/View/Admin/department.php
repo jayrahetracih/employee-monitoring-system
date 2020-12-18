@@ -49,10 +49,10 @@
                 </button>
             </div>
             <form class="justify-content-center p-4 form-color" id="add_department" method ="POST">
-                <div class="form-group">
+                <div class="form-group" id="dept_name">
                     <input type="text" class="form-control" 
                     name="dept_name" placeholder="Department Name" autocomplete="off">
-                    <span class="invalid-feedback" id="dept_name"></span>
+                    <span class="invalid-feedback" ></span>
                 </div>
                 <button type="submit" class="btn btn-primary  btn-block" name="btn_addDepartment" >Submit</button>
             </form>

@@ -40,12 +40,15 @@ class Department implements InfoInterface {
 
             )))
             {
-                return array('alert_message' => $_POST['dept_name'] . ' Department Added Successfully!');
+                return array('success' => array('message' => $_POST['dept_name'] . ' Department Added Successfully!'));
             }
         }
         else
         {
-            return $validation->errors();
+            $errors = array(
+                'error' => array('message' => implode(', ', $validation->errors()))
+            );
+            return $errors;
         }
     }
 
