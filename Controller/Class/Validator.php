@@ -56,7 +56,7 @@ class Validator
     }
 
     private function addError($key,$val){
-        $this->errors[$key] = $val;
+        $this->errors[] = array('field' => $key,'message' => $val);
     }
      public function passed() {
         return $this->passed;
