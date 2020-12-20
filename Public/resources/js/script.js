@@ -32,7 +32,6 @@ $('#add_department').on('submit', function(event)
         .then((res) => res.json())
         .then((data) => {
 
-            console.log(data);
             if(data.result == 'success')
             {
                 let params = {status : 'Active'};
@@ -45,9 +44,13 @@ $('#add_department').on('submit', function(event)
 
             }else
             {
-                //this works for now on a single form group ========== For Revision
-                $('#dept_name').find('span').text(data.message);
-                $('#dept_name').find('input').addClass('is-invalid');
+                data.messages.forEach(function(err)
+                {
+                    console.log(err.field, err.message);
+                    $('#' + err.field).find('span').text(err.message);
+                    $('#' + err.field).find('input').addClass('is-invalid');   
+                }); 
+                                
             }
 
         }).catch((e) => console.log(e));
@@ -145,12 +148,3 @@ function alterTable(data)
             });
     });
 }
-
-/* function initializeErrors(e)
-{
-    e.forEach(errs)
-    {
-        $('#' + errs).find('span').text(data.dept_name);
-        $('#dept_name').find('input').addClass('is-invalid');
-    }   
-} */
