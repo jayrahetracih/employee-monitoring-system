@@ -9,9 +9,8 @@ a {
 }
 
 a:hover {
-    color: rgb(92, 90, 90);
+    color: rgb(155, 148, 148)
 }
-
 
 img {
     width: 100%;
@@ -20,6 +19,20 @@ img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+img[alt$="kubocoders"] {
+    margin-bottom: 50px;
+} 
+
+.btn {
+    background-color: black;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #6C757D;
+    color: white;
 }
 
 .main-container{
@@ -41,10 +54,6 @@ img {
     
 }
 
-img[alt$="kubocoders"] {
-    margin-bottom: 50px;
-} 
-
 .img-container {
     grid-area: box2;
     background-image: url("../img/building.jpeg");
@@ -53,7 +62,7 @@ img[alt$="kubocoders"] {
     background-size: cover;
 } 
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 768px) {
     .form {
       width: 100%;
       height: auto;

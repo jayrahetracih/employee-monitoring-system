@@ -1,7 +1,17 @@
 body {
   margin: 0;
+  padding: 0;
   font-family: "Lato", sans-serif;
 }
+
+
+img {
+  background-position: center;
+  width: 100%;
+  height: auto;
+  margin-top: 15px;
+}
+
 
 .sidebar {
   margin: 0;
@@ -27,8 +37,13 @@ body {
 }
 
 .sidebar a:hover:not(.active) {
-  /*background-color: #000;
-   color: white; */
+   background-color: #000;
+   color: white; 
+}
+
+a:active {
+  background-color: black;
+  color: wheat;
 }
 
 div.content {
@@ -38,31 +53,11 @@ div.content {
 }
 
 
-/*drop-down-btn*/
-.emp-btn {
-  padding: 15px 15px;
-  text-decoration: none;
-  display: block;
-  border: none;
-  background: none;
-  width:100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-}
-/* Add an active class to the active dropdown button */
-.active {
-  background-color: #000;
-  color: white;
-}
 
-/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-.employee-dropdown-container {
-  display: none;
-  background-color: #c9cc26;
-}
 
-@media screen and (max-width: 700px) {
+
+ /* 
+ @media screen and (max-width: 700px) {
   .sidebar {
     width: 100%;
     height: auto;
@@ -72,9 +67,15 @@ div.content {
   div.content {margin-left: 0;}
 }
 
+
 @media screen and (max-width: 400px) {
   .sidebar a {
     text-align: center;
     float: none;
-  }
-}
+  } 
+} */
+
+
+
+
+
