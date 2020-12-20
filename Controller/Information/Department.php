@@ -2,14 +2,12 @@
 require_once __DIR__.'../InfoInterface.php';
 require_once __DIR__.'../../../Controller/Class/Validator.php';
 require_once __DIR__.'../../../Model/Db.php';
-require_once __DIR__.'../../../Model/Department_model.php';
 /**
  * undocumented class
  */
 class Department implements InfoInterface {
     private $db;
     private $validator;
-    private $dpt_model;
     private $post;
 
     public function __construct($post=array())
@@ -17,7 +15,6 @@ class Department implements InfoInterface {
         $this->db = Db::getInstance();
         $this->post = $post;
         $this->validator = new Validator();
-        $this->dpt_model = new Department_model();
     }
 
     public function create()
@@ -40,13 +37,13 @@ class Department implements InfoInterface {
 
             )))
             {
-                return array('success' => array('message' => $_POST['dept_name'] . ' Department Added Successfully!'));
+                return array('success' => array('message' => $_POST['dept_name'] . ' Added Successfully!'));
             }
         }
         else
         {
             $errors = array(
-                'error' => array('message' => implode(', ', $validation->errors()))
+                'error' => $validation->errors()
             );
             return $errors;
         }
