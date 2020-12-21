@@ -16,9 +16,9 @@ class Admin
         return $info->create();
     }
 
-    function readInfo($type)
+    function readInfo($type, $post)
     {
-        $info = $this->info_factory->initializeInfo($type, NULL);
+        $info = $this->info_factory->initializeInfo($type, $post);
         return $info->read();
     }
 /* 

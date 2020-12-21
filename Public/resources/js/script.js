@@ -17,8 +17,7 @@ for (i = 0; i < dropdown.length; i++) {
 // department.php ====================================
 
 $(document).ready(function(){
-    let params = {status : 'Active'};
-    getData(params);
+    getData();
 });
 
 $('#add_department').on('submit', function(event)
@@ -56,7 +55,13 @@ $('#add_department').on('submit', function(event)
         }).catch((e) => console.log(e));
 });
 
-function getData(params)
+$('#search').on('change',function(event)
+{
+    let params = {search : this.value};
+    getData(params);
+});
+
+function getData(params = null)
 {
     fetch('../../../Controller/Handler/Department/read.php', {
         method : 'POST',
@@ -68,6 +73,7 @@ function getData(params)
         .then((res) => res.json())
         .then((data) => {
 
+            console.log(data);
         alterTable(data);
 
         }).catch((e) => console.log(e));
@@ -100,11 +106,13 @@ function alterTable(data)
     let output = '';
     data.forEach(function(result)
     {
-            output += `
-                <tr class="d-flex" >
-                    <td class="col-10 fields" id="${result.department_id}">${result.department}</td>
-                    
-                    <td class="col-2 btn btn-primary btn-sm dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            output +=
+            result.department != 'Unassigned' ?
+            
+                `<tr class="d-flex" >
+                    <td class="col-7 fields" id="${result.department_id}">${result.department}</td>
+                    <td class="col-3">${result.status}</td>
+                    <td class="col-2 btn btn-primary btn-sm dropdown-toggle actions" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" onClick="$('#${result.department_id}').attr('contenteditable', 'true');$('#${result.department_id}').focus();">Rename</a>
@@ -114,10 +122,15 @@ function alterTable(data)
                     
                     </td>
                 </tr>
-            `;
+            ` : ``;
     });
     document.getElementById('output').innerHTML = output;
     let el = document.getElementsByClassName('fields');
+    setEventListeners(el);
+}
+
+function setEventListeners(el)
+{
     Array.from(el).forEach(function(el) 
     {
             el.addEventListener('keydown', function(event)

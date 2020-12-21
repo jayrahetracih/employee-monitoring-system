@@ -4,7 +4,11 @@
         <table class="table table-striped table-bordered">
             <thead>
                 <tr class="d-flex">
-                    <th class="col-10">Department Name</th>
+                    <th class="col-12"><input type="text" class="form-control" id="search" placeholder="Search Department"/></th>
+                </tr>
+                <tr class="d-flex">
+                    <th class="col-7">Department Name</th>
+                    <th class="col-3">Status</th>
                     <th class="col-2"> Action</th>
                 </tr>
             </thead>

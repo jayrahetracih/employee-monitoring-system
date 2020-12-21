@@ -51,7 +51,13 @@ class Department implements InfoInterface {
 
     public function read()
     {
-        $read_data = array('column'=> array('*'));
+        if(!empty($this->post))
+        {
+            $read_data = array(
+                'column'=> array('*'),
+                'condition' => array($this->post)
+                    );    
+        }else{$read_data = array('column'=> array('*'));}
         return $this->db->get('tbl_department', $read_data);
     }
 
