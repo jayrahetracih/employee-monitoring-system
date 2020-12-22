@@ -23,7 +23,8 @@ $(document).ready(function(){
 $('#add_department').on('submit', function(event)
 {
     event.preventDefault();
-    const form_values = new FormData(this);
+    $('#add_department').html($('#add_department').serialize());
+    /* const form_values = new FormData(this);
     fetch('../../../Controller/Handler/Department/create.php', {
         method  : 'POST',
         body    : form_values
@@ -52,7 +53,7 @@ $('#add_department').on('submit', function(event)
                                 
             }
 
-        }).catch((e) => console.log(e));
+        }).catch((e) => console.log(e)); */
 });
 
 $('#search').on('change',function(event)
@@ -63,7 +64,9 @@ $('#search').on('change',function(event)
 
 function getData(params = null)
 {
-    fetch('../../../Controller/Handler/Department/read.php', {
+    let controller = {type : 'department', action : 'read'}
+    params = $.extend(controller, params);
+    fetch('../../../Controller/Handler/Department/router.php', {
         method : 'POST',
         headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +84,9 @@ function getData(params = null)
 
 function updateData(params)
 {
-    fetch('../../../Controller/Handler/Department/update.php', {
+    let controller = {type : 'department', action : 'update'}
+    params = $.extend(controller, params);
+    fetch('../../../Controller/Handler/Department/router.php', {
         method : 'POST',
         headers: {
                     'Content-Type': 'application/json'

@@ -1,15 +1,10 @@
 <?php
 
 require_once __DIR__.'../../../../Controller/User/Admin.php';
-
-
 $admin = new Admin();
-
-
-
 $json_post = json_decode(file_get_contents('php://input')); //Get the json post that was submitted
 
-if(!empty($json_post))
+if(!empty($json_post->search))
 {
     foreach($json_post as $key => $value)
     {
@@ -29,20 +24,4 @@ if(!empty($json_post))
 }else{$filter_params = null;}
 
 $department_table = $admin->readInfo('department',$filter_params); //Get all data from db
-
-/* $data = array(); //create empty array to store filtered results
-$x = 0;
-
-foreach($department_table as $table_row)
-{
-    if($table_row[$json_key] === $json_value)
-    {
-        $data[$x] = array(
-            'department_id' => $table_row['department_id'],
-            'department'    => $table_row['department'],
-            'status'        => $table_row['status'],
-        );
-        $x++;
-    }
-} */
 echo json_encode($department_table);
