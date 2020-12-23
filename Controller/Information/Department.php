@@ -32,12 +32,12 @@ class Department implements InfoInterface {
         {
             if($this->db->insert('tbl_department', array(
 
-                'department' => $_POST['dept_name'],
+                'department' => $this->post['dept_name'],
                 'status' => 'Active'
 
             )))
             {
-                return array('success' => array('message' => $_POST['dept_name'] . ' Added Successfully!'));
+                return array('success' => array('message' => $this->post['dept_name'] . ' Added Successfully!'));
             }
         }
         else

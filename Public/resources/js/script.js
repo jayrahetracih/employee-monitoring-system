@@ -23,15 +23,21 @@ $(document).ready(function(){
 $('#add_department').on('submit', function(event)
 {
     event.preventDefault();
-    $('#add_department').html($('#add_department').serialize());
-    /* const form_values = new FormData(this);
-    fetch('../../../Controller/Handler/Department/create.php', {
+    const form_values = new FormData(this);
+    var json_form_data = {type: 'department', action : 'create'};
+    form_values.forEach((value, key) => json_form_data[key] = value);
+    
+    fetch('../../../Controller/Handler/Department/router.php', {
         method  : 'POST',
-        body    : form_values
+        headers: {
+                    'Content-Type': 'application/json'
+                },
+        body    : JSON.stringify(json_form_data)
         })
         .then((res) => res.json())
         .then((data) => {
 
+            console.log(data);
             if(data.result == 'success')
             {
                 let params = {status : 'Active'};
@@ -52,8 +58,8 @@ $('#add_department').on('submit', function(event)
                 }); 
                                 
             }
-
-        }).catch((e) => console.log(e)); */
+ 
+        }).catch((e) => console.log(e));
 });
 
 $('#search').on('change',function(event)

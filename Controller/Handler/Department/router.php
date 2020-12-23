@@ -23,7 +23,14 @@ switch($json_post->type)
                 switch($json_post->action)
                 {
                     case 'create':
-                        $result = $admin->addInfo('department',$_POST);
+                        foreach($json_post as $key => $value)
+                        {
+                            if($key != 'type' && $key != 'action')
+                            {
+                                $post[$key] = $value;   
+                            }
+                        }
+                        $result = $admin->addInfo('department',$post);
                         if(isset($result['success']))
                         {
                             extract($result['success']);
@@ -44,7 +51,7 @@ switch($json_post->type)
                                 );
                             }
                         }
-                        echo json_encode($json_post);
+                        echo json_encode($callback);
                         break;
                     case 'read':
                         if(!empty($json_post->search))
@@ -83,7 +90,7 @@ switch($json_post->type)
                         );
 
                         $res = $admin->updateInfo('department', $read_data);
-                        echo json_encode($json_post);
+                        echo json_encode($res);
                         break;
                 }
         break;
