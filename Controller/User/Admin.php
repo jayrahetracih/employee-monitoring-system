@@ -21,6 +21,18 @@ class Admin
         $info = $this->info_factory->initializeInfo($type, NULL);
         return $info->read();
     }
+
+    function readSingleInfo($type,$get)
+    {
+        $info = $this->info_factory->initializeInfo($type, $get);
+        return $info->readOne();
+    }
+    
+    function updateInfo($type, $post)
+    {
+        $info = $this->info_factory->initializeInfo($type, $post);
+        return $info->update($post);
+    }
 /* 
     function addInfo($type, $table, $params)
     {
@@ -34,11 +46,7 @@ class Admin
         return $info->read($fields, $table, $condition);
     } */
 
-    function updateInfo($type, $post)
-    {
-        $info = $this->info_factory->initializeInfo($type, $post);
-        return $info->update($post);
-    }
+   
       
 
 }

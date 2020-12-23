@@ -17,8 +17,6 @@ switch($action) {
     default:
         die('Access denied for this function!');
 }
-
-
     function firstFunction($name)
     {
         echo "Hello - this is the first function " . $name;

@@ -1,17 +1,17 @@
 <?php 
-require_once __DIR__.'../../../Controller/Information/InfoInterface.php';
-require_once __DIR__.'../../../Controller/Class/Validator.php';
-require_once __DIR__.'../../../Model/Employee_model.php';
+require_once '../../../Controller/Information/InfoInterface.php';
+require_once '../../../Controller/Class/Validator.php';
+require_once '../../../Model/Employee_model.php';
 
 
 class Employee implements InfoInterface{
 
     private $employee_model;
-    private $post;
+    private $employee_data;
 
-    public function __construct($post=array())
+    public function __construct($employee_data=array())
     {
-        $this->post = $post;
+        $this->employee_data = $employee_data;
         $this->validator = new Validator();
         $this->employee_model = new Employee_model();
     }
@@ -29,7 +29,7 @@ class Employee implements InfoInterface{
 
         if (isset($_POST['btn_register'])) {
 
-            $validation = $this->validator->checkInput($this->post , array(
+            $validation = $this->validator->checkInput($this->employee_data , array(
                 'first_name' => array(
                     'name' => 'First Name',
                     'required' => true,
@@ -69,17 +69,12 @@ class Employee implements InfoInterface{
                 'email' => array(
                     'name' => 'Email',
                     'required' => true
-                ),         
-                'password' => array(
-                    'name' => 'Password',
-                    'required' => true,
-                    'min' => 6
-                )         
+                )        
             )); 
 
             if($validation->passed()) {
 
-               return $this->employee_model->executeCreate($this->post);
+               return $this->employee_model->createData($this->employee_data);
  
             } else {
               
@@ -93,9 +88,73 @@ class Employee implements InfoInterface{
 
         return $this->employee_model->executeRead();
     }
+    public function readOne(){
 
-    public function update($post/* $table, $set_values = array(), $condition = array() */){
-        echo 'update employee info';
+       return $this->employee_model->displayDataById($this->employee_data);
+    }
+
+    public function update(){
+
+         if (isset($this->employee_data['btn_update_employee'])) {
+
+            $validation = $this->validator->checkInput($this->employee_data , array(
+                'first_name' => array(
+                    'name' => 'First Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'middle_name' => array(
+                    'name' => 'Middle Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'last_name' => array(
+                    'name' => 'Last Name',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 30
+                ),
+                'gender' => array(
+                    'name' => 'Gender',
+                    'required' => true
+                ),            
+                'age' => array(
+                    'name' => 'Age',
+                    'required' => true
+                ),         
+                'address' => array(
+                    'name' => 'Address',
+                    'required' => true,
+                    'min' => 10,
+                    'max' => 50
+                ),           
+                'mobile_number' => array(
+                    'name' => 'Mobile Number',
+                    'required' => true
+                ),                 
+                'email' => array(
+                    'name' => 'Email',
+                    'required' => true
+                )        
+            )); 
+
+            if($validation->passed()) {
+
+                 return $this->employee_model->updateData($this->employee_data);
+
+            } else {
+              
+                return  $validation->errors(); 
+            } 
+
+
+       
+
+        }
+
+        
     }
 
     public function changeStatus(){

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `tbl_employees` (
   `emp_details_id` int(11) NOT NULL,
   `emp_id_number` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'Active',
+  `employee_status` varchar(10) NOT NULL DEFAULT 'Active',
   PRIMARY KEY (`employee_id`)
 )engine=InnoDB;
 
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `tbl_employee_details` (
 CREATE TABLE IF NOT EXISTS   `tbl_department` (
     `department_id` INT(11) NOT NULL AUTO_INCREMENT ,
     `department` varchar(100) NOT NULL DEFAULT 'Unassigned',
-    `status` varchar(10) NOT NULL DEFAULT 'Active',
+    `department_status` varchar(10) NOT NULL DEFAULT 'Active',
     PRIMARY KEY (`department_id`)
 )engine=InnoDB;
 

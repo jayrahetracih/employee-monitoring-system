@@ -9,20 +9,29 @@ class Employee_model
     {
         $this->db = Db::getInstance();
     }
-    function executeCreate($post = array())
+    function createData($post = array())
     { 
         return $this->db->insertWithTransaction($post);
     }
 
-    function executeRead()
+    public function executeRead()
     { 
         // array key must be column/join_table/join_id/condition/logical_operator
         $read_data = array('column'=> array('*'),
                             'join_table'=> array('tbl_employee_details','tbl_department'),
-                            'join_id'=> array('emp_details_id','department_id'),
-                            'condition'=>array(array('condition_field' => 'tbl_employees.status','operator'=> '=','value'=>'Active'))
+                            'join_id'=> array('emp_details_id','department_id')/* ,
+                            'condition'=>array(array('condition_field' => 'tbl_employees.employee_status','operator'=> '=','value'=>'Inactive')) */
                         );
 
         return $this->db->select('tbl_employees',$read_data);
     }
+
+    public function displayDataById($post){
+         return $this->db->selectOne($post);
+    }
+
+    public function updateData($post = array()){
+         return $this->db->update('tbl_employees',$post);
+    }
+
 }

@@ -6,7 +6,7 @@ function test() {
     // Handle success
     .then(result => result.json())  // convert to json
     .then((data) => {
-    
+    console.log(data);
     let output = '';
     data.forEach(function(result){
         output +=`<tr>
@@ -18,7 +18,7 @@ function test() {
                     <td>${result.address}</td>
                     <td>${result.mobile_number}</td>
                     <td>${result.email}</td>
-                    <td>${result.status}</td>
+                    <td>${result.employee_status}</td>
                     <td>${result.date_hire}</td>
                     <td>
 
@@ -46,6 +46,7 @@ function test() {
 }
 
 function read(){
+
     fetch("test.php",{
         method: "POST",
         body: "action=read",
@@ -91,3 +92,4 @@ function read(){
     .catch(err => console.log('Request Failed', err)); // Catch errors
   
 }
+

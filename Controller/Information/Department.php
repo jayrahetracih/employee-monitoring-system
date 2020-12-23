@@ -63,9 +63,9 @@ class Department implements InfoInterface {
         return $this->db->get('tbl_department', $read_data);
     }
 
-    public function update($post)
+    public function update()
     {
-        $read_data = array('set_clause'=> array(
+        /* $read_data = array('set_clause'=> array(
             'set_fields' => array($post['set_fields']),
             'set_values' => array($post['set_values']),
         'condition_field' => $post['condition_field'],
@@ -79,7 +79,7 @@ class Department implements InfoInterface {
         else
         {
             die('error');
-        }
+        } */
     }
 
 }

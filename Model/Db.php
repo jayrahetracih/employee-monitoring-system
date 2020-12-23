@@ -45,15 +45,18 @@ class Db {
     {
         try {
 
-            $this->pdo->beginTransaction();    
+            $this->pdo->beginTransaction();       
             // Remove last two value of array
-            $employee_details = array_slice($post, 0, count($post) - 2); 
+            $employee_details = array_slice($post, 0, count($post) - 1); 
+
+            // Generate 6 digits number
+            $password = mt_rand(100000,1000000);
             // Hash Password 
-            $password = password_hash($post['password'],PASSWORD_DEFAULT);
+            $hash_password = password_hash($password,PASSWORD_DEFAULT);
             // select all users
             $stmt = $this->pdo->query("SELECT employee_id FROM tbl_employees");
             $number_of_employees = $stmt->rowCount();
-            $employee_number_id = date("Ym") . "000" . strval($number_of_employees + 1);
+            $employee_id_number = date("Ym") . "000" . strval($number_of_employees + 1);
 
              // Insert the metadata of the employee_details into the database
             $stmt_employee_details = $this->pdo->prepare(
@@ -67,11 +70,14 @@ class Db {
             $stmt_employees = $this->pdo->prepare(
                 'INSERT INTO tbl_employees (`emp_details_id`,`emp_id_number`,`password`) 
                 VALUES(?,?,?)');
-            $stmt_employees->execute([$employee_details_id ,$employee_number_id,$password]);
+            $stmt_employees->execute([$employee_details_id ,$employee_id_number,$hash_password]);
             
             // Make the changes to the database permanent
             if ($this->pdo->commit()) {
-                echo 'success';
+
+                return 'Successful Inserting data' . '</br>' . 
+                'Your Employee ID : ' .  $employee_id_number . '</br>' .
+                'Your Password is : ' . $password;
             } 
             
         }
@@ -157,15 +163,34 @@ class Db {
             return $stmt->fetchAll(); 
         }
     }
+
+    public function selectOne($employee_id)
+    {        
+        $sql = "SELECT *  FROM tbl_employees 
+        INNER JOIN tbl_department ON tbl_employees.department_id = tbl_department.department_id
+        INNER JOIN  tbl_employee_details ON tbl_employees.emp_details_id = tbl_employee_details.emp_details_id 
+        WHERE employee_id = ? ";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$employee_id]);
+
+        return $stmt->fetch();
         
+    }  
+
+    public function update($table,$post){
+        echo 'set new data';
+    }
+  
+
     /**
      * userLogin
      *
      * @param  array $data
      * @return void
      */
-    public function userLogin($data = array()){
-
+    public function userLogin($data = array())
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM tbl_employees WHERE emp_id_number = ?");
         $stmt->execute([$data['tb_id_number']]);
         $has_user = $stmt->fetch();
@@ -221,6 +246,8 @@ class Db {
 
     }
 
+  
+/* 
   public function delete($table, $where)
   {
       return $this->action('DELETE',$in,$table,$where);
@@ -295,6 +322,6 @@ class Db {
     return $this;
 
   }
-
+ */
 
 }

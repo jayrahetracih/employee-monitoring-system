@@ -1,4 +1,4 @@
-    <div class="sidebar">
+<!--     <div class="sidebar">
         <a href="#home">Home</a>
         <button class="emp-btn">Employee
             <i class="fa fa-caret-down"></i>
@@ -12,4 +12,11 @@
         <a href="#leave">Leave</a>
         <a href="#attendance">Report</a>
         <a href="#leave">User Management</a>
-    </div>
+    </div> -->
+<div class="col-2">
+    <h2 class="text-center pt-5 mb-5">Dashboard</h2>
+    <ul>
+      <li><a href="employee.php">Employee</a></li> 
+      <li><a href="create_employee.php">Create</a></li> 
+    </ul>
+</div>
