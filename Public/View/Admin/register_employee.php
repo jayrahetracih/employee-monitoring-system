@@ -27,6 +27,16 @@ $fields = array('name' => array(
                 );
 
 extract($fields);
+if(is_array($post_result))
+{
+    foreach($post_result as $error)
+    {
+        $errors[$error['field']] = $error['message'];
+        print_r($error);
+        extract($error);
+    }
+    
+}
 
 ?>
 
@@ -68,29 +78,29 @@ extract($fields);
 
                             <!-- Gender -->
                              <div class="form-group ">
-                                <select  name="<?php echo $name[$key]; ?>"  class="custom-select form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" >
+                                <select  name="<?php echo $name[$key]; ?>"  class="custom-select form-control <?php echo (!empty( $errors[$name[$key]])) ? 'is-invalid' : '' ; ?>" >
                                     <option value="">Gender</option>
                                     <option value="male">male</option>
                                     <option value="female">female</option>
                                 </select> 
-                                <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
+                                <span class="invalid-feedback" ><?php echo $Gender ?? '' ?></span>
                             </div>
 
                         <?php elseif ($name[$key] == 'password'): ?>
 
                                 <!-- Password -->
                                  <div class="form-group">
-                                    <input type="password" class="form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
+                                    <input type="password" class="form-control <?php echo (!empty( $errors[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
                                     name="<?php echo $name[$key]; ?>" placeholder="<?php echo $placeholder[$key]; ?>">
-                                    <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
+                                    <span class="invalid-feedback" ><?php echo $errors[$name[$key]] ?? '' ?></span>
                                 </div>
 
                         <?php else: ?>
 
                         <div class="form-group">
-                            <input type="text" class="form-control <?php echo (!empty( $post_result[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
+                            <input type="text" class="form-control <?php echo (!empty( $errors[$name[$key]])) ? 'is-invalid' : '' ; ?>" 
                             name="<?php echo $name[$key]; ?>" placeholder="<?php echo $placeholder[$key]; ?>">
-                            <span class="invalid-feedback" ><?php echo $post_result[$name[$key]] ?? '' ?></span>
+                            <span class="invalid-feedback" ><?php echo $errors[$name[$key]] ?? '' ?></span>
                         </div>
 
                         <?php endif; ?>

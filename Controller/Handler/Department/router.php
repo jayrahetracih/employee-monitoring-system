@@ -54,6 +54,7 @@ switch($json_post->type)
                         echo json_encode($callback);
                         break;
                     case 'read':
+                        $filter_params = null;
                         if(!empty($json_post->search))
                         {
                             foreach($json_post as $key => $value)
@@ -66,12 +67,19 @@ switch($json_post->type)
                             $operator           = $json_key != 'search' ? '=' : 'LIKE';
                             $value              = $json_key != 'search' ? $json_value : '%' . $json_value . '%';
                             
-                            $filter_params = array(
+                            $filter_params['condition'] = array(
                                 'condition_field'   => $condition_field,
                                 'operator'          => $operator,
                                 'value'             => $value
                             );
-                        }else{$filter_params = null;}
+                        }
+                        if(!empty($json_post->order_field))
+                        {
+                            $filter_params['order'] = array(
+                                'field' => $json_post->order_field,
+                                'modifier' => $json_post->order_mod
+                            );
+                        }
 
                         $department_table = $admin->readInfo('department',$filter_params); //Get all data from db
                         echo json_encode($department_table);

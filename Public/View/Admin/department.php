@@ -66,3 +66,4 @@
     <!--Form Add Department -->
 
 <?php include_once '../../../Public/layouts/footer.php'; ?>
+<script src="../../../Public/resources/js/department.js?<?php echo rand(); ?>"></script>

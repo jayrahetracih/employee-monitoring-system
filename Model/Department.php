@@ -1,7 +1,7 @@
 <?php 
-require_once __DIR__.'../InfoInterface.php';
-require_once __DIR__.'../../../Controller/Class/Validator.php';
-require_once __DIR__.'../../../Model/Db.php';
+require_once __DIR__.'../../Controller/Information/InfoInterface.php';
+require_once __DIR__.'../../Controller/Class/Validator.php';
+require_once __DIR__.'../Db.php';
 /**
  * undocumented class
  */
@@ -51,13 +51,16 @@ class Department implements InfoInterface {
 
     public function read()
     {
-        if(!empty($this->post))
+        $read_data['column'] = array('*');
+        extract($this->post);
+        if(!empty($this->post['condition']))
         {
-            $read_data = array(
-                'column'=> array('*'),
-                'condition' => array($this->post)
-                    );    
-        }else{$read_data = array('column'=> array('*'));}
+            $read_data['condition'] = array($condition);
+        }
+        if(!empty($this->post['order']))
+        {
+            $read_data['order'] = array($order);
+        }
         return $this->db->get('tbl_department', $read_data);
     }
 

@@ -125,7 +125,12 @@ class Db {
                 $query  .= implode(' ',array_values($condition_query));
             } 
         }
+        if(array_key_exists('order',$read_data)) {
 
+            extract($read_data);
+            $query .= "ORDER BY {$order[0]['field']} {$order[0]['modifier']}";
+  
+        }
         return $query;
 
     }
