@@ -17,7 +17,7 @@ class Validator
 
             if ($rule === 'required' && empty($value)) {
 
-                $this->addError($item,$name . " is {$rule}" . "<br>");
+                $this->addError($item,$name . " is {$rule}");
 
             }else if(!empty($value)){
 
@@ -25,17 +25,17 @@ class Validator
 
                    case 'min':
                         if(strlen($value) < $rule_value) {
-                            $this->addError($item,$name . " must be a minimum of {$rule_value} characters.". "<br>");
+                            $this->addError($item,$name . " must be a minimum of {$rule_value} characters.");
                         } 
                        break;
                    case 'max':
                         if(strlen($value) > $rule_value) {
-                            $this->addError($item,$name . " must be a maximum of {$rule_value} characters.". "<br>");
+                            $this->addError($item,$name . " must be a maximum of {$rule_value} characters.");
                         } 
                        break;
                    case 'valid':
                         if(!filter_var($value,FILTER_VALIDATE_EMAIL)){
-                            $this->addError($item,$name ." is not {$rule}" . "<br>");
+                            $this->addError($item,$name ." is not {$rule}");
                         } 
                        break;
            
@@ -55,8 +55,8 @@ class Validator
            
     }
 
-    private function addError($key,$val){
-        $this->errors[$key] = $val;
+    private function addError($key,$value){
+        $this->errors[] = array('field' => $key,'error_message' => $value);
     }
      public function passed() {
         return $this->passed;

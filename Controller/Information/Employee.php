@@ -1,7 +1,7 @@
 <?php 
-require_once '../../../Controller/Information/InfoInterface.php';
-require_once '../../../Controller/Class/Validator.php';
-require_once '../../../Model/Employee_model.php';
+require_once __DIR__.'../../../Controller/Information/InfoInterface.php';
+require_once __DIR__.'../../../Controller/Class/Validator.php';
+require_once __DIR__.'../../../Model/Employee_model.php';
 
 
 class Employee implements InfoInterface{
@@ -27,66 +27,65 @@ class Employee implements InfoInterface{
     public function create()
     {
 
-        if (isset($_POST['btn_register'])) {
+        $validation = $this->validator->checkInput($this->employee_data , array(
+            'first_name' => array(
+                'name' => 'First Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'middle_name' => array(
+                'name' => 'Middle Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'last_name' => array(
+                'name' => 'Last Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'gender' => array(
+                'name' => 'Gender',
+                'required' => true
+            ),            
+            'age' => array(
+                'name' => 'Age',
+                'required' => true
+            ),         
+            'address' => array(
+                'name' => 'Address',
+                'required' => true,
+                'min' => 10,
+                'max' => 50
+            ),           
+            'mobile_number' => array(
+                'name' => 'Mobile Number',
+                'required' => true
+            ),                 
+            'email' => array(
+                'name' => 'Email',
+                'required' => true
+            )        
+        )); 
 
-            $validation = $this->validator->checkInput($this->employee_data , array(
-                'first_name' => array(
-                    'name' => 'First Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'middle_name' => array(
-                    'name' => 'Middle Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'last_name' => array(
-                    'name' => 'Last Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'gender' => array(
-                    'name' => 'Gender',
-                    'required' => true
-                ),            
-                'age' => array(
-                    'name' => 'Age',
-                    'required' => true
-                ),         
-                'address' => array(
-                    'name' => 'Address',
-                    'required' => true,
-                    'min' => 10,
-                    'max' => 50
-                ),           
-                'mobile_number' => array(
-                    'name' => 'Mobile Number',
-                    'required' => true
-                ),                 
-                'email' => array(
-                    'name' => 'Email',
-                    'required' => true
-                )        
-            )); 
+        if($validation->passed()) {
 
-            if($validation->passed()) {
+            return $this->employee_model->createData($this->employee_data);
 
-               return $this->employee_model->createData($this->employee_data);
- 
-            } else {
-              
-                return  $validation->errors(); 
-            } 
+        } else {
 
-        }
+            $result = array('result' => 'failed','result_data'=> $validation->errors());
+
+            return $result;            
+        } 
+
     }
 
     public function read(){
 
-        return $this->employee_model->executeRead();
+        return $this->employee_model->readData();
     }
     public function readOne(){
 
@@ -95,65 +94,59 @@ class Employee implements InfoInterface{
 
     public function update(){
 
-         if (isset($this->employee_data['btn_update_employee'])) {
+        $validation = $this->validator->checkInput($this->employee_data , array(
+            'first_name' => array(
+                'name' => 'First Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'middle_name' => array(
+                'name' => 'Middle Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'last_name' => array(
+                'name' => 'Last Name',
+                'required' => true,
+                'min' => 2,
+                'max' => 30
+            ),
+            'gender' => array(
+                'name' => 'Gender',
+                'required' => true
+            ),            
+            'age' => array(
+                'name' => 'Age',
+                'required' => true
+            ),         
+            'address' => array(
+                'name' => 'Address',
+                'required' => true,
+                'min' => 10,
+                'max' => 50
+            ),           
+            'mobile_number' => array(
+                'name' => 'Mobile Number',
+                'required' => true
+            ),                 
+            'email' => array(
+                'name' => 'Email',
+                'required' => true
+            )        
+        )); 
 
-            $validation = $this->validator->checkInput($this->employee_data , array(
-                'first_name' => array(
-                    'name' => 'First Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'middle_name' => array(
-                    'name' => 'Middle Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'last_name' => array(
-                    'name' => 'Last Name',
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30
-                ),
-                'gender' => array(
-                    'name' => 'Gender',
-                    'required' => true
-                ),            
-                'age' => array(
-                    'name' => 'Age',
-                    'required' => true
-                ),         
-                'address' => array(
-                    'name' => 'Address',
-                    'required' => true,
-                    'min' => 10,
-                    'max' => 50
-                ),           
-                'mobile_number' => array(
-                    'name' => 'Mobile Number',
-                    'required' => true
-                ),                 
-                'email' => array(
-                    'name' => 'Email',
-                    'required' => true
-                )        
-            )); 
+        if($validation->passed()) {
 
-            if($validation->passed()) {
+            return $this->employee_model->updateData($this->employee_data);
 
-                 return $this->employee_model->updateData($this->employee_data);
-
-            } else {
-              
-                return  $validation->errors(); 
-            } 
-
-
-       
-
-        }
-
+        } else {
+            
+            $result = array('result' => 'failed','result_data'=> $validation->errors());
+            
+            return $result;    
+        } 
         
     }
 

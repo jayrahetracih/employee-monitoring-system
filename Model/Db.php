@@ -46,9 +46,6 @@ class Db {
         try {
 
             $this->pdo->beginTransaction();       
-            // Remove last two value of array
-            $employee_details = array_slice($post, 0, count($post) - 1); 
-
             // Generate 6 digits number
             $password = mt_rand(100000,1000000);
             // Hash Password 
@@ -58,13 +55,13 @@ class Db {
             $number_of_employees = $stmt->rowCount();
             $employee_id_number = date("Ym") . "000" . strval($number_of_employees + 1);
 
-             // Insert the metadata of the employee_details into the database
-            $stmt_employee_details = $this->pdo->prepare(
-            'INSERT INTO `tbl_employee_details`(`first_name`, `middle_name`,
-            `last_name`, `gender`,`age`, `address`, `mobile_number`, `email`)
-            VALUES (?,?,?,?,?,?,?,?)');
+            $insert_sql = "INSERT INTO tbl_employee_details (first_name , middle_name ,
+            last_name , age , gender, address , mobile_number , email)
+            VALUES (:first_name, :middle_name, :last_name , :age, :gender, :address,
+            :mobile_number , :email)";
+            $stmt_employee_details = $this->pdo->prepare($insert_sql);
+            $stmt_employee_details->execute($post);
 
-            $stmt_employee_details->execute(array_values($employee_details));
             $employee_details_id = $this->pdo->lastInsertId();
 
             $stmt_employees = $this->pdo->prepare(
@@ -72,12 +69,20 @@ class Db {
                 VALUES(?,?,?)');
             $stmt_employees->execute([$employee_details_id ,$employee_id_number,$hash_password]);
             
-            // Make the changes to the database permanent
+             // Make the changes to the database permanent
             if ($this->pdo->commit()) {
 
-                return 'Successful Inserting data' . '</br>' . 
-                'Your Employee ID : ' .  $employee_id_number . '</br>' .
-                'Your Password is : ' . $password;
+                $message =   "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+                                Successful Inserting data Your Employee ID : {$employee_id_number}
+                                Your Password is :  {$password}
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>"; 
+                
+                $result = array('result' => 'success','result_data'=> $message);
+
+                return $result;
             } 
             
         }
@@ -150,7 +155,7 @@ class Db {
 
         $column = implode(',',array_values($column));
 
-        $sql = "SELECT {$column} FROM {$table} {$query}";
+        $sql = "SELECT {$column} FROM {$table} {$query} ORDER BY date_hire DESC";
     
         $stmt = $this->pdo->prepare($sql);
 
@@ -174,13 +179,72 @@ class Db {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$employee_id]);
 
-        return $stmt->fetch();
-        
+        return $stmt->fetch();   
     }  
 
-    public function update($table,$post){
-        echo 'set new data';
+    public function update($table,$read_data)
+    {
+        $query = '';
+        $column = '';
+        $conditions = '';
+        $join_table_query = array();
+        $condition_query = array();
+        $column_query = array();     
+
+        if (array_key_exists('join_table',$read_data)) {
+            
+            extract($read_data);
+
+            foreach ($join_table as $key => $value) {
+                $join_table_query[$key] = "INNER JOIN {$join_table[$key]} 
+                ON {$table}.{$join_id[$key]} = {$join_table[$key]}.{$join_id[$key]}";
+            } 
+
+            $query  .= implode(' ',array_values($join_table_query)); 
+           
+        }
+           
+            extract($read_data);
+
+            foreach ($condition as $key => $value) {
+                $condition_query[] = "{$value}";
+            }
+
+            foreach ($post_data as $key => $value) {
+
+                if ($key != 'employee_id') {
+                     $column_query[$key] = "{$key} = ?";
+                }
+              
+            }
+
+            $column .= implode(' , ', array_values($column_query));
+            $conditions .= implode(' ', array_values($condition_query));
+     
+            $sql_update = "UPDATE {$table} {$query} SET {$column} WHERE {$conditions}";
+
+            $stmt_update = $this->pdo->prepare($sql_update);
+
+            if ($stmt_update->execute(array_values($post_data))) {
+
+                $message =   "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+                                Employee Has Been Successfully Updated..
+                                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>"; 
+                
+                $result = array('result' => 'success','result_data'=> $message);
+
+                return $result;
+
+            } else {
+            echo 'error';
+            }
+    
+
     }
+    
   
 
     /**

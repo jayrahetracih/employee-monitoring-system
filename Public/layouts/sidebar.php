@@ -13,8 +13,8 @@
         <a href="#attendance">Report</a>
         <a href="#leave">User Management</a>
     </div> -->
-<div class="col-2">
-    <h2 class="text-center pt-5 mb-5">Dashboard</h2>
+<div class="col-1">
+    <h2 class="text-center pt-5 mb-5">Data</h2>
     <ul>
       <li><a href="employee.php">Employee</a></li> 
       <li><a href="create_employee.php">Create</a></li> 

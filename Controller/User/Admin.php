@@ -33,20 +33,5 @@ class Admin
         $info = $this->info_factory->initializeInfo($type, $post);
         return $info->update($post);
     }
-/* 
-    function addInfo($type, $table, $params)
-    {
-       $info = $this->info_factory->initializeInfo($type,$params);
-       return $info->create();
-    }
- */
- /*    function readInfo($type, $fields, $table, $condition = array())
-    {
-        $info = $this->info_factory->initializeInfo($type, NULL);
-        return $info->read($fields, $table, $condition);
-    } */
-
-   
-      
 
 }
